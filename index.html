@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe Menu - Order Now</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header with Cart -->
+    <header class="header hidden">
+        <div class="header-content">
+            <div class="header-location">
+                <div class="location-icon">
+                    <i class="fas fa-coffee"></i>
+                </div>
+                <div class="location-text">
+                    <div class="location-label">Welcome to</div>
+                    <div class="location-name">Blissful Cafe</div>
+                </div>
+            </div>
+            <button class="cart-button" onclick="showCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Landing Page -->
+    <section id="landingPage" class="landing-page">
+        <div class="landing-bg-image"></div>
+        <div class="landing-content">
+            <h1>Fall in Love with<br>Coffee in Blissful<br>Delight!</h1>
+            <p>Welcome to our cozy coffee corner, where<br>every cup is a delightful treat for you.</p>
+            <button class="btn-primary" onclick="showMenu()">Get Started</button>
+        </div>
+    </section>
+
+    <!-- Menu Page -->
+    <section id="menuPage" class="menu-page hidden">
+        <!-- Header Section with Dark Background -->
+        <div class="menu-header">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search coffee..." id="searchInput" onkeyup="searchMenu()">
+                <button class="filter-btn"><i class="fas fa-sliders-h"></i></button>
+            </div>
+        </div>
+
+        <!-- Promo Banner with Overlap Effect -->
+        <div class="promo-banner-container">
+            <div class="promo-carousel">
+                <!-- Promo Slide 1: BOGO -->
+                <div class="promo-banner promo-slide active">
+                    <div class="promo-badge">Limited Offer</div>
+                    <div class="promo-content">
+                        <h3>Buy One Get<br>One FREE</h3>
+                        <p class="promo-subtitle">On all beverages</p>
+                    </div>
+                    <div class="promo-image skeleton-box">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop" 
+                             alt="Coffee" 
+                             onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
+                             onerror="this.parentElement.classList.remove('skeleton-box'); this.style.display='none'">
+                    </div>
+                </div>
+                
+                <!-- Promo Slide 2: Discount -->
+                <div class="promo-banner promo-slide">
+                    <div class="promo-badge">Special Deal</div>
+                    <div class="promo-content">
+                        <h3>30% OFF<br>Today Only</h3>
+                        <p class="promo-subtitle">On espresso drinks</p>
+                    </div>
+                    <div class="promo-image skeleton-box">
+                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=200&h=200&fit=crop" 
+                             alt="Espresso" 
+                             onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
+                             onerror="this.parentElement.classList.remove('skeleton-box'); this.style.display='none'">
+                    </div>
+                </div>
+                
+                <!-- Promo Slide 3: Free Item -->
+                <div class="promo-banner promo-slide">
+                    <div class="promo-badge">New Member</div>
+                    <div class="promo-content">
+                        <h3>FREE Pastry<br>with Coffee</h3>
+                        <p class="promo-subtitle">First order bonus</p>
+                    </div>
+                    <div class="promo-image skeleton-box">
+                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop&sat=-100" 
+                             alt="Pastry" 
+                             onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
+                             onerror="this.parentElement.classList.remove('skeleton-box'); this.style.display='none'">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Promo Navigation Dots -->
+            <div class="promo-dots">
+                <span class="dot active" onclick="goToPromoSlide(0)"></span>
+                <span class="dot" onclick="goToPromoSlide(1)"></span>
+                <span class="dot" onclick="goToPromoSlide(2)"></span>
+            </div>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all')">All Coffee</button>
+            <button class="tab-btn" onclick="filterCategory('coffee')">Macchiato</button>
+            <button class="tab-btn" onclick="filterCategory('cold-drinks')">Latte</button>
+            <button class="tab-btn" onclick="filterCategory('food')">Americano</button>
+        </div>
+
+        <!-- Menu Items Grid -->
+        <div class="menu-container" id="menuContainer">
+            <!-- Menu items will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <!-- Cart Page -->
+    <section id="cartPage" class="cart-page hidden">
+        <div class="page-header">
+            <button class="back-btn" onclick="showMenu()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2>Your Cart</h2>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically inserted here -->
+        </div>
+
+        <div class="cart-empty hidden" id="cartEmpty">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Your cart is empty</p>
+            <button class="btn-secondary" onclick="showMenu()">Browse Menu</button>
+        </div>
+
+        <div class="cart-summary" id="cartSummary">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span>GST (5%)</span>
+                <span id="tax">₹0</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="total">₹0</span>
+            </div>
+            <button class="btn-primary" onclick="showCheckout()">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <!-- Checkout Page -->
+    <section id="checkoutPage" class="checkout-page hidden">
+        <div class="page-header">
+            <button class="back-btn" onclick="showCart()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2>Order</h2>
+        </div>
+
+        <div class="checkout-content">
+            <!-- Order Summary -->
+            <div class="order-summary-section">
+                <h3>Order Summary</h3>
+                <div class="summary-items" id="checkoutSummary">
+                    <!-- Checkout items will be dynamically inserted here -->
+                </div>
+                <div class="summary-totals">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="checkoutSubtotal">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>GST (5%)</span>
+                        <span id="checkoutTax">₹0</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="checkoutTotal">₹0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Information Form -->
+            <div class="customer-info-section">
+                <h3>Your Information</h3>
+                <form id="checkoutForm" onsubmit="handleCheckout(event)">
+                    <div class="form-group">
+                        <label for="customerName">Name</label>
+                        <input type="text" id="customerName" required placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tableNumber">Table Number</label>
+                        <input type="text" id="tableNumber" required placeholder="Enter table number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="specialInstructions">Special Instructions (Optional)</label>
+                        <textarea id="specialInstructions" rows="3" placeholder="Any special requests?"></textarea>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="payment-section">
+                        <h4>Payment Method</h4>
+                        <div class="payment-options">
+                            <button type="button" class="payment-btn active" onclick="selectPayment('cash')">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>Cash</span>
+                            </button>
+                            <button type="button" class="payment-btn" onclick="selectPayment('card')">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Card</span>
+                            </button>
+                            <button type="button" class="payment-btn" onclick="selectPayment('wallet')">
+                                <i class="fas fa-wallet"></i>
+                                <span>E-Wallet</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary btn-place-order">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Place Order</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Confirmation Modal -->
+    <div id="confirmationModal" class="modal hidden">
+        <div class="modal-content confirmation-modal">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Order Confirmed!</h2>
+            <p>Thank you for your order</p>
+            <p class="order-number">Order #<span id="orderNumber"></span></p>
+            <p class="order-message">Your order will be ready soon</p>
+            <div class="estimated-time">
+                <i class="fas fa-clock"></i>
+                <span>Estimated time: 15-20 minutes</span>
+            </div>
+            <button class="btn-primary" onclick="resetApp()">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Menu</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Item Detail Modal -->
+    <div id="itemModal" class="modal hidden">
+        <div class="modal-content item-modal">
+            <button class="close-btn" onclick="closeItemModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="item-detail-image" id="modalItemImage"></div>
+            <h2 id="modalItemName"></h2>
+            <div class="item-rating-modal">
+                <i class="fas fa-star rating-star"></i>
+                <span id="modalItemRating">4.8</span>
+            </div>
+            <p class="item-detail-description" id="modalItemDescription"></p>
+            
+            <!-- Size Selection -->
+            <div class="size-section" id="sizeSection">
+                <h4>Size</h4>
+                <div class="size-options" id="sizeOptions">
+                    <!-- Sizes will be added dynamically -->
+                </div>
+            </div>
+            
+            <p class="item-detail-price" id="modalItemPrice"></p>
+            <div class="quantity-selector">
+                <button onclick="decreaseQuantity()">-</button>
+                <input type="number" id="itemQuantity" value="1" min="1" readonly>
+                <button onclick="increaseQuantity()">+</button>
+            </div>
+            
+            <!-- Special Instructions for this item -->
+            <div class="special-instructions-section">
+                <label for="itemSpecialInstructions">
+                    <i class="fas fa-edit"></i>
+                    Special Instructions (Optional)
+                </label>
+                <textarea 
+                    id="itemSpecialInstructions" 
+                    rows="2" 
+                    placeholder="e.g., No sugar, Extra hot, Less ice..."
+                    maxlength="150"></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span>/150
+                </div>
+            </div>
+            
+            <button class="btn-primary" onclick="addToCartFromModal()">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Add to Cart</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
