@@ -157,10 +157,47 @@ let modalQuantity = 1;
 let selectedPaymentMethod = 'cash';
 
 // Initialize the app
+// Main initialization - consolidated DOMContentLoaded listener
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize menu and cart
     renderMenuItems();
     updateCartCount();
     createFloatingParticles();
+    
+    // Initialize special instructions character counter
+    const textarea = document.getElementById('itemSpecialInstructions');
+    if (textarea) {
+        textarea.addEventListener('input', updateCharCount);
+    }
+    
+    // Initialize keyboard navigation support
+    const focusableElements = document.querySelectorAll('button, a, input, textarea, select');
+    focusableElements.forEach(el => {
+        el.addEventListener('focus', () => {
+            el.style.outline = '2px solid var(--primary-color)';
+            el.style.outlineOffset = '2px';
+        });
+        
+        el.addEventListener('blur', () => {
+            el.style.outline = 'none';
+        });
+    });
+    
+    // Initialize promo carousel
+    showPromoSlide(0);
+    startPromoAutoSlide();
+    
+    // Add promo carousel hover pause functionality
+    const promoCarousel = document.querySelector('.promo-carousel');
+    if (promoCarousel) {
+        promoCarousel.addEventListener('mouseenter', () => {
+            clearInterval(promoSlideInterval);
+        });
+        
+        promoCarousel.addEventListener('mouseleave', () => {
+            startPromoAutoSlide();
+        });
+    }
 });
 
 // Create floating coffee particles in background
@@ -317,7 +354,11 @@ function showItemDetail(itemId) {
     modalQuantity = 1;
     selectedSize = item.sizes && item.sizes.length > 0 ? item.sizes[0] : 'M';
     
-    document.getElementById('modalItemImage').innerHTML = `<img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/400x300/C67C4E/ffffff?text=Coffee'">`;
+    const modalImageContainer = document.getElementById('modalItemImage');
+    modalImageContainer.className = 'item-detail-image skeleton-box';
+    modalImageContainer.innerHTML = `<img src="${item.image}" alt="${item.name}" 
+         onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')" 
+         onerror="this.parentElement.classList.remove('skeleton-box'); this.src='https://via.placeholder.com/400x300/C67C4E/ffffff?text=Coffee'">`;
     document.getElementById('modalItemName').textContent = item.name;
     document.getElementById('modalItemRating').textContent = item.rating || '4.5';
     document.getElementById('modalItemDescription').textContent = item.description;
@@ -376,13 +417,6 @@ function updateCharCount() {
 }
 
 // Add event listener for character counter
-document.addEventListener('DOMContentLoaded', () => {
-    const textarea = document.getElementById('itemSpecialInstructions');
-    if (textarea) {
-        textarea.addEventListener('input', updateCharCount);
-    }
-});
-
 function increaseQuantity() {
     modalQuantity++;
     document.getElementById('itemQuantity').value = modalQuantity;
@@ -532,8 +566,10 @@ function renderCartItems() {
     
     container.innerHTML = cart.map((item, index) => `
         <div class="cart-item">
-            <div class="cart-item-image">
-                <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/100x100/C67C4E/ffffff?text=Item'">
+            <div class="cart-item-image skeleton-box">
+                <img src="${item.image}" alt="${item.name}" 
+                     onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')" 
+                     onerror="this.parentElement.classList.remove('skeleton-box'); this.src='https://via.placeholder.com/100x100/C67C4E/ffffff?text=Item'">
             </div>
             <div class="cart-item-details">
                 <div class="cart-item-name">${item.name}</div>
@@ -627,16 +663,6 @@ function handleCheckout(event) {
     
     // Launch confetti!
     launchConfetti();
-    
-    // Log order (in production, this would be sent to backend)
-    console.log('Order placed:', {
-        orderNumber,
-        customer: { name, table },
-        paymentMethod: selectedPaymentMethod,
-        items: cart,
-        instructions,
-        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.1
-    });
 }
 
 // Confetti celebration effect
@@ -961,23 +987,6 @@ window.handleCheckout = function(event) {
     }, 1500);
 };
 
-// Add focus styles for accessibility
-document.addEventListener('DOMContentLoaded', () => {
-    // Add keyboard navigation support
-    const focusableElements = document.querySelectorAll('button, a, input, textarea, select');
-    
-    focusableElements.forEach(el => {
-        el.addEventListener('focus', () => {
-            el.style.outline = '2px solid var(--primary-color)';
-            el.style.outlineOffset = '2px';
-        });
-        
-        el.addEventListener('blur', () => {
-            el.style.outline = 'none';
-        });
-    });
-});
-
 // Preload critical images
 function preloadImages() {
     const imagesToPreload = [
@@ -1062,25 +1071,3 @@ function startPromoAutoSlide() {
     // Auto-slide every 4 seconds
     promoSlideInterval = setInterval(nextPromoSlide, 4000);
 }
-
-// Initialize promo carousel
-document.addEventListener('DOMContentLoaded', () => {
-    showPromoSlide(0);
-    startPromoAutoSlide();
-});
-
-// Pause auto-slide when user hovers over promo
-const promoCarousel = document.querySelector('.promo-carousel');
-if (promoCarousel) {
-    promoCarousel.addEventListener('mouseenter', () => {
-        clearInterval(promoSlideInterval);
-    });
-    
-    promoCarousel.addEventListener('mouseleave', () => {
-        startPromoAutoSlide();
-    });
-}
-
-// Log initialization
-console.log('%c🚀 Cafe UI Prototype Loaded Successfully!', 'color: #C67C4E; font-size: 16px; font-weight: bold;');
-console.log('%c✨ Professional features activated', 'color: #4CAF50; font-size: 12px;');

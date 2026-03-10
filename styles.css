@@ -1699,6 +1699,33 @@ body::before {
     animation: shimmer 2s linear infinite;
 }
 
+/* Skeleton for cart and modal images (light theme) */
+.cart-item-image.skeleton-box,
+.item-detail-image.skeleton-box {
+    background: linear-gradient(
+        90deg,
+        #E0E0E0 0%,
+        #EFEFEF 20%,
+        #F5F5F5 40%,
+        #EFEFEF 60%,
+        #E0E0E0 80%,
+        #E0E0E0 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s linear infinite;
+}
+
+.cart-item-image.skeleton-box img,
+.item-detail-image.skeleton-box img {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.cart-item-image:not(.skeleton-box) img,
+.item-detail-image:not(.skeleton-box) img {
+    opacity: 1;
+}
+
 /* Glassmorphism Effects */
 .promo-card {
     background: rgba(198, 124, 78, 0.15);
