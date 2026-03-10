@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafe Menu - Order Now</title>
+    <title>Café Cafeeto - Premium Coffee Experience</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="location-text">
                     <div class="location-label">Welcome to</div>
-                    <div class="location-name">Blissful Cafe</div>
+                    <div class="location-name">Café Cafeeto</div>
                 </div>
             </div>
             <button class="cart-button" onclick="showCart()">
@@ -29,11 +29,68 @@
 
     <!-- Landing Page -->
     <section id="landingPage" class="landing-page">
+        <div class="landing-overlay"></div>
         <div class="landing-bg-image"></div>
+        
+        <!-- Animated Coffee Elements -->
+        <div class="coffee-beans coffee-bean-1"></div>
+        <div class="coffee-beans coffee-bean-2"></div>
+        <div class="coffee-beans coffee-bean-3"></div>
+        
         <div class="landing-content">
-            <h1>Fall in Love with<br>Coffee in Blissful<br>Delight!</h1>
-            <p>Welcome to our cozy coffee corner, where<br>every cup is a delightful treat for you.</p>
-            <button class="btn-primary" onclick="showMenu()">Get Started</button>
+            <!-- Logo Section -->
+            <div class="landing-logo">
+                <div class="logo-circle">
+                    <i class="fas fa-coffee"></i>
+                </div>
+            </div>
+            
+            <!-- Brand Name -->
+            <div class="brand-section">
+                <h1 class="brand-name">Café Cafeeto</h1>
+                <div class="brand-tagline">Premium Coffee Experience</div>
+            </div>
+            
+            <!-- Description -->
+            <p class="landing-description">
+                Indulge in artisanal coffee crafted with passion.<br>
+                From bean to cup, every moment is extraordinary.
+            </p>
+            
+            <!-- Features Grid -->
+            <div class="landing-features">
+                <div class="feature-item">
+                    <i class="fas fa-leaf"></i>
+                    <span>100% Organic</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-award"></i>
+                    <span>Award Winning</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-heart"></i>
+                    <span>Made Fresh</span>
+                </div>
+            </div>
+            
+            <!-- CTA Button -->
+            <button class="btn-primary landing-cta" onclick="showMenu()">
+                <span>Explore Menu</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <!-- Additional Info -->
+            <div class="landing-footer">
+                <div class="landing-info">
+                    <i class="fas fa-clock"></i>
+                    <span>Open Daily 7AM - 10PM</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
         </div>
     </section>
 
