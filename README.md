@@ -1,10 +1,10 @@
-# ☕ Cafe Menu UI Prototype
+# ☕ Cafe Coffeeto - Digital Menu
 
-A mobile-first cafe menu application prototype designed for QR code access. Customers can browse menu items, add to cart, and place orders seamlessly from their mobile devices.
+A mobile-first digital menu application for Cafe Coffeeto, designed for QR code access. Customers can browse our carefully curated menu items, add to cart, and place orders seamlessly from their mobile devices.
 
-## 📱 Project Overview
+## 📱 About Cafe Coffeeto
 
-This prototype is designed for cafe customers who scan a QR code to access the menu. The application is optimized for mobile devices and provides a smooth ordering experience.
+Cafe Coffeeto is a premium coffee destination offering exceptional coffee experiences. This digital menu application allows our customers to easily browse our offerings, place orders directly from their table, and enjoy a seamless cafe experience. Simply scan the QR code at your table to get started!
 
 ## ✨ Features
 
@@ -43,12 +43,12 @@ This prototype is designed for cafe customers who scan a QR code to access the m
 ## 📂 File Structure
 
 ```
-Cafe UI Prototype/
+Cafe Coffeeto Digital Menu/
 │
 ├── index.html          # Main HTML structure
 ├── styles.css          # All styling and animations
 ├── script.js          # Application logic and functionality
-└── README.md          # This documentation file
+└── README.md          # Project documentation
 ```
 
 ## 🛠️ Technical Details
@@ -80,11 +80,11 @@ Cafe UI Prototype/
 4. Demonstrate the user flow:
    - Landing page → Menu → Add items → Cart → Checkout → Confirmation
 
-### For Deployment
-1. Upload all files to a web server
-2. Access via URL (e.g., `https://your-cafe.com/menu`)
-3. Generate QR code linking to the URL
-4. Print QR codes for table placement
+### For Cafe Coffeeto Deployment
+1. Upload all files to Cafe Coffeeto's web server
+2. Access via URL (e.g., `https://cafecoffeeto.com/menu`)
+3. Generate QR code linking to the menu URL
+4. Print QR codes for table placement throughout the cafe
 
 ## 📋 Menu Categories & Items
 
@@ -270,47 +270,47 @@ For production deployment:
 
 ## 📝 License
 
-This is a prototype for client presentation. All rights reserved.
+This digital menu application is developed for Cafe Coffeeto. All rights reserved.
 
 ## 👥 Credits
 
-**Developed for**: Cafe Delight
-**Purpose**: Client Meeting Prototype
+**Developed for**: Cafe Coffeeto
+**Purpose**: Digital Menu Application
 **Date**: March 2026
 
 ---
 
-## 🎉 Demo Instructions for Client Meeting
+## 🎉 Using the Cafe Coffeeto Digital Menu
 
-1. **Setup**:
+1. **For Staff Training**:
    - Open `index.html` in Chrome browser
    - Use device toolbar (F12 → Toggle Device Toolbar)
    - Select "iPhone 12 Pro" or similar mobile device
-   - Zoom to fit screen
+   - Familiarize staff with the customer ordering flow
 
-2. **Walkthrough**:
-   - Start at landing page
-   - Show menu browsing
-   - Demonstrate category filtering
+2. **Customer Experience Walkthrough**:
+   - Start at landing page (what customers see when scanning QR)
+   - Browse the Cafe Coffeeto menu
+   - Demonstrate category filtering (Coffee, Cold Drinks, Food, Desserts)
    - Add multiple items to cart
-   - Show cart management
+   - Show cart management and quantity adjustments
    - Complete checkout process
-   - Display order confirmation
+   - Display order confirmation with order number
 
-3. **Highlight Features**:
-   - Mobile-optimized design
-   - Easy navigation
-   - Simple ordering process
-   - Professional appearance
-   - Fast and responsive
+3. **Key Cafe Coffeeto Features**:
+   - Mobile-optimized for smartphones
+   - Easy navigation for all ages
+   - Simple ordering process - no app download required
+   - Professional appearance matching cafe branding
+   - Fast and responsive - works on any mobile browser
 
-4. **Discussion Points**:
-   - Menu customization options
-   - Additional features needed
-   - Backend integration requirements
-   - Payment processing preferences
-   - Timeline and budget
+4. **Staff Discussion Points**:
+   - Order processing workflow
+   - How to handle order confirmations
+   - Peak hours management
+   - Menu updates and seasonal items
+   - Customer support for technical issues
 
 ---
 
-**Ready to present! 🚀**
+**Welcome to Cafe Coffeeto's Digital Experience! ☕**
