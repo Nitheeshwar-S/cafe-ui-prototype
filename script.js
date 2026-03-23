@@ -951,21 +951,24 @@ function addToCartFromModal() {
 function addToCart(itemId, quantity = 1, specialInstructions = '') {
     const item = menuItems.find(i => i.id === itemId);
     if (!item) return;
-    
+
     // Find existing item with same ID and same special instructions
-    const existingItem = cart.find(i => 
-        i.id === itemId && 
+    const existingItem = cart.find(i =>
+        i.id === itemId &&
         (i.specialInstructions || '') === specialInstructions
     );
-    
+
     if (existingItem) {
         existingItem.quantity += quantity;
     } else {
         cart.push({ ...item, quantity, specialInstructions });
     }
-    
+
     updateCartCount();
     showCartNotification();
+
+    // Add cart bounce animation
+    animateCartBounce();
 }
 
 function removeFromCart(itemId) {
@@ -2774,7 +2777,7 @@ function renderMenuItemsGrid(searchTerm = '', category = 'all') {
             <div class="item-image-container">
                 <img src="${item.image}" alt="${item.name}" class="item-image"
                      onerror="this.src='https://via.placeholder.com/200x200/D2042D/ffffff?text=Item'">
-                <span class="item-badge ${item.isVeg ? 'veg' : 'non-veg'}">${item.isVeg ? 'Veg' : 'Non-Veg'}</span>
+                <span class="item-badge ${item.isVeg ? 'veg' : 'non-veg'}">${item.isVeg ? 'VEG' : 'NON-VEG'}</span>
                 <button class="quick-edit-btn" onclick="event.stopPropagation(); showEditMenuItemSheet(${item.id})">
                     <i class="fas fa-pen"></i>
                 </button>
@@ -2782,6 +2785,7 @@ function renderMenuItemsGrid(searchTerm = '', category = 'all') {
             <div class="item-info">
                 <p class="item-name">${item.name}</p>
                 <p class="item-price">₹${item.price}</p>
+                <p class="item-category">${item.category}</p>
             </div>
         </div>
     `).join('');
@@ -3106,13 +3110,6 @@ function animateCartBounce() {
     }
 }
 
-// Override addToCart to include animation
-const originalAddToCart = addToCart;
-addToCart = function(itemId, quantity = 1, specialInstructions = '') {
-    originalAddToCart(itemId, quantity, specialInstructions);
-    animateCartBounce();
-};
-
 // Update Admin Stats with Animation
 function updateAdminStatsAnimated() {
     const totalOrdersEl = document.getElementById('totalOrders');
@@ -3142,7 +3139,7 @@ function updateAdminStatsAnimated() {
     if (ordersCount) ordersCount.textContent = `${orders.length} orders`;
 }
 
-// Call animated stats on admin dashboard load
+// Override showAdminDashboard to include animated stats
 const originalShowAdminDashboard = showAdminDashboard;
 showAdminDashboard = function() {
     hideAllPages();
