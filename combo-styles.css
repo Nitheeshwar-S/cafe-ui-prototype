@@ -1,0 +1,465 @@
+/* ============================================
+   COMBO STYLES
+   ============================================ */
+
+/* Combo Cards */
+.combo-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    animation: fadeInUp 0.5s ease backwards;
+    padding: 8px;
+    grid-column: span 2; /* Make combo cards span 2 columns */
+}
+
+.combo-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(198, 124, 78, 0.2);
+}
+
+.combo-image {
+    width: 100%;
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #F5F5F5;
+}
+
+.combo-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.combo-card:hover .combo-image img {
+    transform: scale(1.05);
+}
+
+/* Combo Badges */
+.combo-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+}
+
+.savings-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 3;
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+}
+
+/* Combo Content */
+.combo-content {
+    padding: 1rem;
+}
+
+.combo-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #2F2D2C;
+    line-height: 1.3;
+}
+
+.combo-description {
+    font-size: 0.85rem;
+    color: #9B9B9B;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.combo-items-preview {
+    background: rgba(198, 124, 78, 0.08);
+    border-left: 3px solid var(--primary-color);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+.combo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.combo-pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.original-price {
+    font-size: 0.85rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.combo-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Combo Modal */
+.combo-modal {
+    max-width: 500px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: left;
+    padding: 1.5rem;
+}
+
+.combo-detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.combo-detail-image {
+    width: 100%;
+    height: 250px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    background: #F5F5F5;
+}
+
+.combo-detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.combo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.combo-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.combo-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #FFD700;
+    font-size: 1.1rem;
+}
+
+.combo-items-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.combo-items-section h3 {
+    color: var(--text-dark);
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.combo-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.combo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    background: rgba(198, 124, 78, 0.08);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+}
+
+.combo-item-name {
+    font-weight: 500;
+    color: var(--text-dark);
+    flex: 1;
+}
+
+.combo-item-size {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.combo-item-qty {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.combo-pricing-detail {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.combo-pricing-detail > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.original-pricing {
+    color: var(--text-light);
+}
+
+.combo-pricing {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.savings-highlight {
+    color: var(--primary-color) !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Admin Combo Modal */
+.admin-combo-modal {
+    max-width: 600px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.admin-combo-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.admin-combo-header h2 {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.radio-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.radio-label input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+
+.combo-item-input {
+    display: grid;
+    grid-template-columns: 2fr 1fr 80px 40px;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+
+.item-select, .size-input, .qty-input {
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-dark);
+    font-size: 0.85rem;
+}
+
+.remove-item-btn {
+    background: #FF5733;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.remove-item-btn:hover {
+    background: #E64A19;
+    transform: scale(1.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #FF5733 0%, #FF8A65 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #E64A19 0%, #FF7043 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 87, 51, 0.4);
+}
+
+/* Admin Combo Controls */
+.admin-combo-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.combo-admin-btn {
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.combo-admin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(198, 124, 78, 0.4);
+}
+
+.combo-edit-btn {
+    position: absolute;
+    top: 50px;
+    right: 8px;
+    background: rgba(198, 124, 78, 0.9);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 4;
+}
+
+.combo-card:hover .combo-edit-btn {
+    opacity: 1;
+}
+
+.combo-edit-btn:hover {
+    background: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* Responsive Design for Combos */
+@media (max-width: 480px) {
+    .combo-card {
+        grid-column: span 1;
+    }
+
+    .combo-detail-image {
+        height: 200px;
+    }
+
+    .combo-title {
+        font-size: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .combo-item-input {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+/* Animation for combo cards */
+.combo-card:nth-child(1) { animation-delay: 0s; }
+.combo-card:nth-child(2) { animation-delay: 0.1s; }
+.combo-card:nth-child(3) { animation-delay: 0.2s; }
+.combo-card:nth-child(4) { animation-delay: 0.3s; }

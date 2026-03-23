@@ -551,7 +551,7 @@ function showMenu() {
     hideAllPages();
     document.getElementById('menuPage').classList.remove('hidden');
     document.querySelector('.header').classList.remove('hidden');
-    
+
     // Add stagger animation to menu items
     setTimeout(() => {
         const items = document.querySelectorAll('.menu-item');
@@ -559,6 +559,57 @@ function showMenu() {
             item.style.animation = `fadeInUp 0.5s ease ${index * 0.05}s backwards`;
         });
     }, 50);
+
+    // Animate trending stats
+    animateTrendingStats();
+}
+
+// Animate Trending Stats on Menu Page
+function animateTrendingStats() {
+    const trendingOrders = document.getElementById('trendingOrders');
+    const trendingItems = document.getElementById('trendingItems');
+    const trendingRating = document.getElementById('trendingRating');
+
+    if (trendingOrders) {
+        animateCounterValue(trendingOrders, orders.length || Math.floor(Math.random() * 50) + 20);
+    }
+    if (trendingItems) {
+        animateCounterValue(trendingItems, menuItems.length);
+    }
+    if (trendingRating) {
+        animateCounterValue(trendingRating, 4.7, true);
+    }
+}
+
+// Generic counter animation with decimal support
+function animateCounterValue(element, targetValue, isDecimal = false) {
+    const duration = 800;
+    const startValue = 0;
+    const startTime = performance.now();
+
+    function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+        let currentValue;
+        if (isDecimal) {
+            currentValue = (startValue + (targetValue - startValue) * easeProgress).toFixed(1);
+        } else {
+            currentValue = Math.round(startValue + (targetValue - startValue) * easeProgress);
+        }
+
+        element.textContent = currentValue;
+
+        if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+        } else {
+            element.classList.add('pulse');
+            setTimeout(() => element.classList.remove('pulse'), 600);
+        }
+    }
+
+    requestAnimationFrame(updateCounter);
 }
 
 function showCart() {
@@ -616,12 +667,12 @@ function renderMenuItems(category = 'all') {
         );
     }
 
-    container.innerHTML = filteredItems.map(item => `
-        <div class="menu-item" onclick="showItemDetail(${item.id})">
+    container.innerHTML = filteredItems.map((item, index) => `
+        <div class="menu-item fade-in-up" style="animation-delay: ${index * 0.05}s" onclick="showItemDetail(${item.id})">
             <div class="menu-item-image skeleton-box">
                 <img src="${item.image}" alt="${item.name}"
                      onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
-                     onerror="this.parentElement.classList.remove('skeleton-box'); this.src='https://via.placeholder.com/400x300/C67C4E/ffffff?text=Coffee'">
+                     onerror="this.parentElement.classList.remove('skeleton-box'); this.src='https://via.placeholder.com/400x300/D2042D/ffffff?text=Item'">
                 <div class="rating-badge">
                     <i class="fas fa-star"></i>
                     <span class="rating-value">${item.rating || '4.5'}</span>
@@ -2656,3 +2707,446 @@ async function deleteMenuItem(itemId) {
         }
     }
 }
+
+// ============================================
+// MOBILE-FIRST ADMIN MANAGEMENT FUNCTIONS
+// ============================================
+
+// Navigation to Management Pages
+function showMenuManagement() {
+    hideAllPages();
+    document.getElementById('menuManagementPage').classList.remove('hidden');
+    renderMenuItemsGrid();
+}
+
+function showComboManagement() {
+    hideAllPages();
+    document.getElementById('comboManagementPage').classList.remove('hidden');
+    renderCombosGrid();
+}
+
+function showOrdersManagement() {
+    hideAllPages();
+    document.getElementById('ordersManagementPage').classList.remove('hidden');
+    renderAllOrders();
+}
+
+function showAnalytics() {
+    showToast('Analytics coming soon!', 'info');
+}
+
+// Render Menu Items in Grid Layout
+function renderMenuItemsGrid(searchTerm = '', category = 'all') {
+    const grid = document.getElementById('menuItemsGrid');
+    if (!grid) return;
+
+    let filteredItems = menuItems;
+
+    // Apply category filter
+    if (category !== 'all') {
+        filteredItems = filteredItems.filter(item => item.category === category);
+    }
+
+    // Apply search filter
+    if (searchTerm) {
+        const search = searchTerm.toLowerCase();
+        filteredItems = filteredItems.filter(item =>
+            item.name.toLowerCase().includes(search) ||
+            item.description.toLowerCase().includes(search)
+        );
+    }
+
+    if (filteredItems.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state" style="grid-column: span 2;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <p class="empty-state-title">No items found</p>
+                <p class="empty-state-text">Try adjusting your search or filters</p>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filteredItems.map(item => `
+        <div class="admin-item-card fade-in-up" onclick="showEditMenuItemSheet(${item.id})">
+            <div class="item-image-container">
+                <img src="${item.image}" alt="${item.name}" class="item-image"
+                     onerror="this.src='https://via.placeholder.com/200x200/D2042D/ffffff?text=Item'">
+                <span class="item-badge ${item.isVeg ? 'veg' : 'non-veg'}">${item.isVeg ? 'Veg' : 'Non-Veg'}</span>
+                <button class="quick-edit-btn" onclick="event.stopPropagation(); showEditMenuItemSheet(${item.id})">
+                    <i class="fas fa-pen"></i>
+                </button>
+            </div>
+            <div class="item-info">
+                <p class="item-name">${item.name}</p>
+                <p class="item-price">₹${item.price}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Render Combos in Grid Layout
+function renderCombosGrid(searchTerm = '') {
+    const grid = document.getElementById('combosGrid');
+    if (!grid) return;
+
+    let filteredCombos = combos;
+
+    // Apply search filter
+    if (searchTerm) {
+        const search = searchTerm.toLowerCase();
+        filteredCombos = filteredCombos.filter(combo =>
+            combo.name.toLowerCase().includes(search) ||
+            combo.description.toLowerCase().includes(search)
+        );
+    }
+
+    if (filteredCombos.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state" style="grid-column: span 2;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <p class="empty-state-title">No combos found</p>
+                <p class="empty-state-text">Create your first combo offer</p>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filteredCombos.map(combo => `
+        <div class="admin-item-card fade-in-up" onclick="showEditComboSheet('${combo.id}')">
+            <div class="item-image-container">
+                <img src="${combo.image}" alt="${combo.name}" class="item-image"
+                     onerror="this.src='https://via.placeholder.com/200x200/D2042D/ffffff?text=Combo'">
+                <span class="item-badge" style="background: var(--primary-color); color: white;">Combo</span>
+                <button class="quick-edit-btn" onclick="event.stopPropagation(); showEditComboSheet('${combo.id}')">
+                    <i class="fas fa-pen"></i>
+                </button>
+            </div>
+            <div class="item-info">
+                <p class="item-name">${combo.name}</p>
+                <p class="item-price">₹${combo.price} <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.8rem;">₹${combo.originalPrice}</span></p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Render All Orders
+function renderAllOrders() {
+    const container = document.getElementById('allOrdersList');
+    if (!container) return;
+
+    if (orders.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <p class="empty-state-title">No orders yet</p>
+                <p class="empty-state-text">Orders will appear here when customers place them</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = orders.map(order => `
+        <div class="admin-item-card" style="display: block; margin-bottom: var(--spacing-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-sm);">
+                <span style="font-weight: 600; color: var(--text-dark);">Order #${order.orderNumber}</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">${new Date(order.createdAt).toLocaleDateString()}</span>
+            </div>
+            <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: var(--spacing-xs);">
+                ${order.items.length} items
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; color: var(--primary-color);">₹${order.total}</span>
+                <span style="padding: 4px 12px; border-radius: var(--border-radius-full); font-size: 0.75rem; font-weight: 600; background: var(--success-light); color: var(--success);">${order.status}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Search and Filter Functions
+function filterMenuItems(searchTerm) {
+    const activeCategory = document.querySelector('.category-pill.active');
+    const category = activeCategory ? activeCategory.dataset.category : 'all';
+    renderMenuItemsGrid(searchTerm, category);
+}
+
+function filterMenuByCategory(category, element) {
+    // Update active state
+    document.querySelectorAll('.category-pill').forEach(btn => {
+        btn.classList.remove('active', 'btn-primary');
+        btn.classList.add('btn-secondary');
+    });
+    element.classList.remove('btn-secondary');
+    element.classList.add('active', 'btn-primary');
+
+    // Apply filter
+    const searchTerm = document.getElementById('menuSearchInput')?.value || '';
+    renderMenuItemsGrid(searchTerm, category);
+}
+
+function filterCombos(searchTerm) {
+    renderCombosGrid(searchTerm);
+}
+
+// Bottom Sheet Functions
+function showAddMenuItemSheet() {
+    document.getElementById('menuItemSheetTitle').textContent = 'Add Menu Item';
+    document.getElementById('editMenuItemId').value = '';
+    document.getElementById('menuItemForm').reset();
+    openBottomSheet('menuItemSheet', 'menuItemSheetOverlay');
+}
+
+function showEditMenuItemSheet(itemId) {
+    const item = menuItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    document.getElementById('menuItemSheetTitle').textContent = 'Edit Menu Item';
+    document.getElementById('editMenuItemId').value = itemId;
+    document.getElementById('sheetItemName').value = item.name;
+    document.getElementById('sheetItemDescription').value = item.description || '';
+    document.getElementById('sheetItemPrice').value = item.price;
+    document.getElementById('sheetItemCategory').value = item.category;
+    document.getElementById('sheetItemImage').value = item.image || '';
+
+    if (item.isVeg) {
+        document.getElementById('sheetItemVeg').checked = true;
+    } else {
+        document.getElementById('sheetItemNonVeg').checked = true;
+    }
+
+    openBottomSheet('menuItemSheet', 'menuItemSheetOverlay');
+}
+
+function closeMenuItemSheet() {
+    closeBottomSheet('menuItemSheet', 'menuItemSheetOverlay');
+}
+
+function showAddComboSheet() {
+    document.getElementById('comboSheetTitle').textContent = 'Add Combo';
+    document.getElementById('editComboId').value = '';
+    document.getElementById('comboForm').reset();
+    openBottomSheet('comboSheet', 'comboSheetOverlay');
+}
+
+function showEditComboSheet(comboId) {
+    const combo = combos.find(c => c.id === comboId);
+    if (!combo) return;
+
+    document.getElementById('comboSheetTitle').textContent = 'Edit Combo';
+    document.getElementById('editComboId').value = comboId;
+    document.getElementById('sheetComboName').value = combo.name;
+    document.getElementById('sheetComboDescription').value = combo.description || '';
+    document.getElementById('sheetComboOriginalPrice').value = combo.originalPrice;
+    document.getElementById('sheetComboPrice').value = combo.price;
+    document.getElementById('sheetComboImage').value = combo.image || '';
+
+    openBottomSheet('comboSheet', 'comboSheetOverlay');
+}
+
+function closeComboSheet() {
+    closeBottomSheet('comboSheet', 'comboSheetOverlay');
+}
+
+function openBottomSheet(sheetId, overlayId) {
+    document.getElementById(overlayId).classList.add('active');
+    document.getElementById(sheetId).classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeBottomSheet(sheetId, overlayId) {
+    document.getElementById(overlayId).classList.remove('active');
+    document.getElementById(sheetId).classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Save Menu Item from Bottom Sheet
+async function saveMenuItemFromSheet(event) {
+    event.preventDefault();
+
+    const itemId = document.getElementById('editMenuItemId').value;
+    const isEdit = itemId !== '';
+
+    const itemData = {
+        name: document.getElementById('sheetItemName').value,
+        description: document.getElementById('sheetItemDescription').value,
+        price: Number(document.getElementById('sheetItemPrice').value),
+        category: document.getElementById('sheetItemCategory').value,
+        image: document.getElementById('sheetItemImage').value || 'https://via.placeholder.com/400x300/D2042D/ffffff?text=Item',
+        isVeg: document.getElementById('sheetItemVeg').checked,
+        rating: 4.5,
+        isAvailable: true
+    };
+
+    if (isEdit) {
+        // Update existing item
+        const index = menuItems.findIndex(i => i.id == itemId);
+        if (index !== -1) {
+            menuItems[index] = { ...menuItems[index], ...itemData };
+        }
+        showToast('Item updated successfully!', 'success');
+    } else {
+        // Create new item
+        const newItem = {
+            id: Date.now(),
+            ...itemData
+        };
+        menuItems.push(newItem);
+        showToast('Item added successfully!', 'success');
+    }
+
+    closeMenuItemSheet();
+    renderMenuItemsGrid();
+    updateAdminStats();
+}
+
+// Save Combo from Bottom Sheet
+async function saveComboFromSheet(event) {
+    event.preventDefault();
+
+    const comboId = document.getElementById('editComboId').value;
+    const isEdit = comboId !== '';
+
+    const comboData = {
+        name: document.getElementById('sheetComboName').value,
+        description: document.getElementById('sheetComboDescription').value,
+        originalPrice: Number(document.getElementById('sheetComboOriginalPrice').value),
+        price: Number(document.getElementById('sheetComboPrice').value),
+        image: document.getElementById('sheetComboImage').value || 'https://via.placeholder.com/400x300/D2042D/ffffff?text=Combo',
+        savings: Number(document.getElementById('sheetComboOriginalPrice').value) - Number(document.getElementById('sheetComboPrice').value)
+    };
+
+    if (isEdit) {
+        // Update existing combo
+        const index = combos.findIndex(c => c.id === comboId);
+        if (index !== -1) {
+            combos[index] = { ...combos[index], ...comboData };
+        }
+        showToast('Combo updated successfully!', 'success');
+    } else {
+        // Create new combo
+        const newCombo = {
+            id: `combo_${Date.now()}`,
+            ...comboData,
+            items: [],
+            isVeg: true,
+            rating: 4.5
+        };
+        combos.push(newCombo);
+        showToast('Combo added successfully!', 'success');
+    }
+
+    closeComboSheet();
+    renderCombosGrid();
+    updateAdminStats();
+}
+
+// Toast Notification
+function showToast(message, type = 'info') {
+    // Remove existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(toast);
+
+    // Show toast
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Counting Animation for Stats
+function animateCounter(element, targetValue, prefix = '', suffix = '') {
+    const duration = 1000;
+    const startValue = 0;
+    const startTime = performance.now();
+
+    function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+        const currentValue = Math.round(startValue + (targetValue - startValue) * easeProgress);
+        element.textContent = prefix + currentValue + suffix;
+
+        if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+        } else {
+            element.classList.add('counting');
+            setTimeout(() => element.classList.remove('counting'), 500);
+        }
+    }
+
+    requestAnimationFrame(updateCounter);
+}
+
+// Enhanced Cart Animation
+function animateCartBounce() {
+    const cartButton = document.querySelector('.cart-button');
+    if (cartButton) {
+        cartButton.classList.add('cart-bounce');
+        setTimeout(() => cartButton.classList.remove('cart-bounce'), 500);
+    }
+}
+
+// Override addToCart to include animation
+const originalAddToCart = addToCart;
+addToCart = function(itemId, quantity = 1, specialInstructions = '') {
+    originalAddToCart(itemId, quantity, specialInstructions);
+    animateCartBounce();
+};
+
+// Update Admin Stats with Animation
+function updateAdminStatsAnimated() {
+    const totalOrdersEl = document.getElementById('totalOrders');
+    const totalRevenueEl = document.getElementById('totalRevenue');
+    const totalMenuItemsEl = document.getElementById('totalMenuItems');
+
+    if (totalOrdersEl) {
+        animateCounter(totalOrdersEl, orders.length);
+    }
+
+    if (totalRevenueEl) {
+        const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+        animateCounter(totalRevenueEl, Math.round(totalRevenue), '₹');
+    }
+
+    if (totalMenuItemsEl) {
+        animateCounter(totalMenuItemsEl, menuItems.length);
+    }
+
+    // Update counts in nav cards
+    const menuItemsCount = document.getElementById('menuItemsCount');
+    const combosCount = document.getElementById('combosCount');
+    const ordersCount = document.getElementById('ordersCount');
+
+    if (menuItemsCount) menuItemsCount.textContent = `${menuItems.length} items`;
+    if (combosCount) combosCount.textContent = `${combos.length} combos`;
+    if (ordersCount) ordersCount.textContent = `${orders.length} orders`;
+}
+
+// Call animated stats on admin dashboard load
+const originalShowAdminDashboard = showAdminDashboard;
+showAdminDashboard = function() {
+    hideAllPages();
+    document.getElementById('adminPage').classList.remove('hidden');
+    document.querySelector('.header').classList.add('hidden');
+    setTimeout(updateAdminStatsAnimated, 100);
+};

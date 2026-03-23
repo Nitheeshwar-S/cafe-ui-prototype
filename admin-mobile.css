@@ -1,0 +1,962 @@
+/* ============================================
+   MOBILE-FIRST ADMIN DASHBOARD STYLES
+   Cherry Red (#D2042D) & White Theme
+   ============================================ */
+
+/* ===========================================
+   ADMIN NAVIGATION CARDS
+   =========================================== */
+.admin-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+}
+
+.admin-nav-card {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    text-align: center;
+    box-shadow: 0 4px 20px var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-1);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.admin-nav-card:hover::before,
+.admin-nav-card:active::before {
+    transform: scaleX(1);
+}
+
+.admin-nav-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px var(--shadow-primary);
+}
+
+.admin-nav-card:active {
+    transform: scale(0.98);
+}
+
+.admin-nav-card .nav-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--gradient-1);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-sm);
+    box-shadow: 0 4px 12px var(--shadow-primary);
+}
+
+.admin-nav-card .nav-icon i {
+    font-size: 1.5rem;
+    color: var(--white);
+}
+
+.admin-nav-card .nav-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.admin-nav-card .nav-count {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    background: var(--secondary-color);
+    padding: 2px 10px;
+    border-radius: var(--border-radius-full);
+}
+
+/* ===========================================
+   ADMIN STATS CARDS - Cherry Red Theme
+   =========================================== */
+.admin-stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.admin-stat-card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    text-align: center;
+    box-shadow: 0 2px 8px var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.admin-stat-card.primary {
+    background: var(--gradient-1);
+    color: var(--white);
+}
+
+.admin-stat-card.primary .stat-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-stat-card .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: block;
+}
+
+.admin-stat-card.primary .stat-value {
+    color: var(--white);
+}
+
+.admin-stat-card .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Counting Animation for Stats */
+.stat-value.counting {
+    animation: countPulse 0.5s ease-out;
+}
+
+@keyframes countPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ===========================================
+   SEARCH BAR - Mobile Optimized
+   =========================================== */
+.admin-search-bar {
+    padding: var(--spacing-md);
+    background: var(--white);
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: var(--spacing-md);
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    height: var(--touch-target-min);
+    padding: 0 var(--spacing-md) 0 44px;
+    border: 2px solid var(--surface);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--surface);
+    color: var(--text-dark);
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: var(--white);
+    box-shadow: 0 0 0 4px var(--secondary-color);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* ===========================================
+   GRID LAYOUT FOR ITEMS
+   =========================================== */
+.admin-items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+}
+
+@media (min-width: 400px) {
+    .admin-items-grid {
+        gap: var(--spacing-md);
+    }
+}
+
+.admin-item-card {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.admin-item-card:active {
+    transform: scale(0.98);
+}
+
+.admin-item-card .item-image-container {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+.admin-item-card .item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.admin-item-card:hover .item-image {
+    transform: scale(1.05);
+}
+
+.admin-item-card .quick-edit-btn {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    width: 36px;
+    height: 36px;
+    background: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--shadow);
+    transition: all 0.2s ease;
+}
+
+.admin-item-card .quick-edit-btn:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.admin-item-card .quick-edit-btn i {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+.admin-item-card .quick-edit-btn:hover i {
+    color: var(--white);
+}
+
+.admin-item-card .item-info {
+    padding: var(--spacing-sm);
+}
+
+.admin-item-card .item-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-item-card .item-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.admin-item-card .item-badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    left: var(--spacing-sm);
+    padding: 2px 8px;
+    border-radius: var(--border-radius-full);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.admin-item-card .item-badge.veg {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.admin-item-card .item-badge.non-veg {
+    background: var(--error-light);
+    color: var(--error);
+}
+
+/* ===========================================
+   BOTTOM SHEET MODAL
+   =========================================== */
+.bottom-sheet-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.bottom-sheet-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.bottom-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+    z-index: 1001;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-sheet.active {
+    transform: translateY(0);
+}
+
+.bottom-sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--surface);
+    border-radius: var(--border-radius-full);
+    margin: var(--spacing-sm) auto var(--spacing-md);
+}
+
+.bottom-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-md) var(--spacing-md);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bottom-sheet-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.bottom-sheet-close {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    background: var(--surface);
+    border: none;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bottom-sheet-close:hover {
+    background: var(--error-light);
+    color: var(--error);
+}
+
+.bottom-sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    -webkit-overflow-scrolling: touch;
+}
+
+.bottom-sheet-footer {
+    padding: var(--spacing-md);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background: var(--white);
+}
+
+/* ===========================================
+   FORM ELEMENTS - Mobile Touch Friendly
+   =========================================== */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    min-height: var(--touch-target-min);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--surface);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--white);
+    color: var(--text-dark);
+    transition: all 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--secondary-color);
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* ===========================================
+   BUTTONS - Cherry Red Theme
+   =========================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    min-height: var(--touch-target-min);
+    padding: 0 var(--spacing-lg);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--gradient-1);
+    color: var(--white);
+    box-shadow: 0 4px 12px var(--shadow-primary);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-primary);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--text-dark);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary-color);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.btn-danger {
+    background: var(--error);
+    color: var(--white);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-icon {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    padding: 0;
+    border-radius: var(--border-radius);
+}
+
+/* ===========================================
+   FAB (Floating Action Button)
+   =========================================== */
+.fab {
+    position: fixed;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-md);
+    width: 56px;
+    height: 56px;
+    background: var(--gradient-1);
+    border: none;
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px var(--shadow-primary);
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px var(--shadow-primary);
+}
+
+.fab:active {
+    transform: scale(0.95);
+}
+
+.fab i {
+    font-size: 1.5rem;
+    color: var(--white);
+}
+
+/* ===========================================
+   MICRO-ANIMATIONS
+   =========================================== */
+
+/* Cart Bounce Animation */
+@keyframes cartBounce {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(0.95); }
+    75% { transform: scale(1.1); }
+}
+
+.cart-bounce {
+    animation: cartBounce 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Staggered Grid Animation */
+.admin-items-grid .admin-item-card:nth-child(1) { animation-delay: 0.05s; }
+.admin-items-grid .admin-item-card:nth-child(2) { animation-delay: 0.1s; }
+.admin-items-grid .admin-item-card:nth-child(3) { animation-delay: 0.15s; }
+.admin-items-grid .admin-item-card:nth-child(4) { animation-delay: 0.2s; }
+.admin-items-grid .admin-item-card:nth-child(5) { animation-delay: 0.25s; }
+.admin-items-grid .admin-item-card:nth-child(6) { animation-delay: 0.3s; }
+
+.admin-items-grid .admin-item-card {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Ripple Effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.ripple:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+/* Scale on Press */
+.press-scale {
+    transition: transform 0.1s ease;
+}
+
+.press-scale:active {
+    transform: scale(0.97);
+}
+
+/* ===========================================
+   LOADING STATES
+   =========================================== */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        var(--surface) 25%,
+        #E5E7EB 50%,
+        var(--surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--border-radius);
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton-card {
+    height: 180px;
+}
+
+.skeleton-text {
+    height: 16px;
+    margin-bottom: 8px;
+}
+
+.skeleton-text.short {
+    width: 60%;
+}
+
+/* ===========================================
+   EMPTY STATE
+   =========================================== */
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--secondary-color);
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-md);
+}
+
+.empty-state-icon i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.empty-state-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-xs);
+}
+
+.empty-state-text {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* ===========================================
+   TOAST NOTIFICATIONS
+   =========================================== */
+.toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--text-dark);
+    color: var(--white);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px var(--shadow-heavy);
+    z-index: 2000;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background: var(--success);
+}
+
+.toast.error {
+    background: var(--error);
+}
+
+/* ===========================================
+   ADMIN HEADER
+   =========================================== */
+.admin-header {
+    background: var(--gradient-1);
+    color: var(--white);
+    padding: var(--spacing-lg) var(--spacing-md);
+    text-align: center;
+}
+
+.admin-header h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.admin-header p {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+/* ===========================================
+   BACK NAVIGATION
+   =========================================== */
+.back-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--white);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.back-btn {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    background: var(--surface);
+    border: none;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background: var(--secondary-color);
+}
+
+.back-nav h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* ===========================================
+   RESPONSIVE ADJUSTMENTS
+   =========================================== */
+@media (max-width: 360px) {
+    .admin-nav-grid {
+        gap: var(--spacing-sm);
+    }
+
+    .admin-nav-card {
+        padding: var(--spacing-md);
+        min-height: 120px;
+    }
+
+    .admin-nav-card .nav-icon {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (min-width: 480px) {
+    .admin-items-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ===========================================
+   TRENDING STATS FOR CUSTOMER MENU
+   =========================================== */
+.trending-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--white);
+    margin: 0 var(--spacing-md) var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 12px var(--shadow);
+}
+
+.trending-stat {
+    text-align: center;
+    flex: 1;
+}
+
+.trending-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+.trending-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.trending-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--surface);
+}
+
+/* Pulse animation for trending stats */
+.trending-value.pulse {
+    animation: statPulse 0.6s ease-out;
+}
+
+@keyframes statPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); color: var(--primary-dark); }
+    100% { transform: scale(1); }
+}
+
+/* ===========================================
+   CHERRY RED THEME - ADDITIONAL ELEMENTS
+   =========================================== */
+
+/* Cart Button Cherry Red */
+.cart-button {
+    background: var(--gradient-1) !important;
+    color: var(--white) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.cart-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px var(--shadow-primary);
+}
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+    background: var(--gradient-1) !important;
+    color: var(--white) !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.add-to-cart-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 10px var(--shadow-primary);
+}
+
+.add-to-cart-btn:active {
+    transform: scale(0.95);
+}
+
+/* Menu Item Hover */
+.menu-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.menu-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--shadow);
+}
+
+/* Tab Buttons */
+.tab-btn {
+    background: var(--white) !important;
+    color: var(--text-dark) !important;
+    border: 2px solid transparent !important;
+    transition: all 0.2s ease !important;
+}
+
+.tab-btn.active {
+    background: var(--gradient-1) !important;
+    color: var(--white) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.tab-btn:hover:not(.active) {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Promo Banner Cherry Red */
+.promo-banner {
+    background: var(--gradient-1) !important;
+}
+
+/* Rating Badge */
+.rating-badge {
+    background: var(--white) !important;
+    color: var(--primary-color) !important;
+}
+
+.rating-badge i {
+    color: var(--primary-color) !important;
+}
+
+/* Price Color */
+.menu-item-price {
+    color: var(--primary-color) !important;
+}
+
+/* Dot Indicators */
+.promo-dots .dot.active {
+    background: var(--primary-color) !important;
+}
