@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Counter = require('./Counter');
 
 const orderItemSchema = new mongoose.Schema({
     itemId: {
@@ -19,7 +20,6 @@ const orderItemSchema = new mongoose.Schema({
         required: true,
         min: [1, 'Quantity must be at least 1']
     },
-    size: String,
     specialInstructions: {
         type: String,
         maxlength: [200, 'Special instructions cannot exceed 200 characters']
@@ -31,7 +31,6 @@ const orderItemSchema = new mongoose.Schema({
     comboItems: [{
         id: Number,
         name: String,
-        size: String,
         quantity: Number
     }]
 }, { _id: false });
@@ -58,11 +57,6 @@ const orderSchema = new mongoose.Schema({
         type: String,
         match: [/^[6-9]\d{9}$/, 'Please provide a valid phone number']
     },
-    tableNumber: {
-        type: String,
-        required: [true, 'Please provide table number'],
-        trim: true
-    },
     items: [orderItemSchema],
     subtotal: {
         type: Number,
@@ -71,11 +65,8 @@ const orderSchema = new mongoose.Schema({
     },
     tax: {
         type: Number,
-        required: true,
-        min: [0, 'Tax cannot be negative'],
-        default: function() {
-            return this.subtotal * 0.05; // 5% tax
-        }
+        default: 0,
+        min: [0, 'Tax cannot be negative']
     },
     discount: {
         type: Number,
@@ -89,15 +80,15 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        required: true,
+        default: 'counter',
         enum: {
-            values: ['cash', 'card', 'wallet', 'upi'],
-            message: 'Payment method must be one of: cash, card, wallet, upi'
+            values: ['counter', 'cash', 'card', 'upi'],
+            message: 'Payment method must be one of: counter, cash, card, upi'
         }
     },
     paymentStatus: {
         type: String,
-        enum: ['pending', 'paid', 'failed', 'refunded'],
+        enum: ['pending', 'paid', 'cancelled'],
         default: 'pending'
     },
     orderStatus: {
@@ -109,17 +100,21 @@ const orderSchema = new mongoose.Schema({
         type: String,
         maxlength: [500, 'Special instructions cannot exceed 500 characters']
     },
+    promoId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Promo'
+    },
     estimatedReadyTime: {
         type: Date,
         default: function() {
             const readyTime = new Date();
-            readyTime.setMinutes(readyTime.getMinutes() + 20); // Default 20 minutes
+            readyTime.setMinutes(readyTime.getMinutes() + 20);
             return readyTime;
         }
     },
     actualReadyTime: Date,
     servedTime: Date,
-    preparationTime: Number, // in minutes
+    preparationTime: Number,
     customerRating: {
         type: Number,
         min: [1, 'Rating must be at least 1'],
@@ -152,13 +147,12 @@ orderSchema.virtual('orderDuration').get(function() {
     return null;
 });
 
-// Pre-save middleware to generate order number
+// Pre-save middleware to generate order number using Counter
 orderSchema.pre('save', async function(next) {
     if (!this.orderNumber) {
-        // Generate order number: YYYYMMDD + random 4 digits
-        const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        const random = Math.floor(1000 + Math.random() * 9000);
-        this.orderNumber = `CF${today}${random}`;
+        // Generate sequential 4-digit order number using Counter model
+        const orderNum = await Counter.getNextOrderNumber();
+        this.orderNumber = orderNum;
     }
     next();
 });

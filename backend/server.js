@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const compression = require('compression');
+const path = require('path');
 
 // Import routes
 const menuRoutes = require('./routes/menu');
@@ -13,6 +14,9 @@ const comboRoutes = require('./routes/combos');
 const orderRoutes = require('./routes/orders');
 const reviewRoutes = require('./routes/reviews');
 const adminRoutes = require('./routes/admin');
+const promoRoutes = require('./routes/promos');
+const settingsRoutes = require('./routes/settings');
+const kitchenRoutes = require('./routes/kitchen');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -60,6 +64,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // MongoDB Atlas Connection
 const connectDB = async () => {
     try {
@@ -105,6 +112,9 @@ app.use('/api/combos', comboRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/promos', promoRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/kitchen', kitchenRoutes);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {

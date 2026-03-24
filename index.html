@@ -6,6 +6,7 @@
     <title>Café Cafeeto - Premium Coffee Experience</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="admin-mobile.css">
+    <link rel="stylesheet" href="css/new-components.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -828,7 +829,128 @@
         </div>
     </div>
 
-    <script src="api-config.js"></script>
-    <script src="script.js"></script>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content login-modal">
+            <button class="close-btn" onclick="closeLoginModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-header">
+                <img src="CafeCoffeeto_Logo.jpg" alt="Logo" class="login-logo">
+                <h2>Staff Login</h2>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <div class="login-error hidden" id="loginError">
+                    Invalid credentials. Please try again.
+                </div>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal hidden">
+        <div class="modal-content confirmation-modal">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Order Placed!</h2>
+            <p class="order-number-display">Your order number is</p>
+            <div class="order-number-big">#<span id="orderNumber"></span></div>
+            <p class="pay-at-counter">Please pay at the counter</p>
+            <p class="redirect-text">Redirecting to order tracking in <span id="redirectCountdown">5</span> seconds...</p>
+            <div class="confirmation-actions">
+                <button class="btn-secondary" onclick="showReviewModal()">
+                    <i class="fas fa-star"></i> Leave a Review
+                </button>
+                <button class="btn-primary" onclick="closeConfirmationAndTrack()">
+                    <i class="fas fa-clipboard-check"></i> Track Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="modal hidden">
+        <div class="modal-content review-modal">
+            <button class="close-btn" onclick="closeReviewModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>How was your experience?</h2>
+            <form id="reviewForm" onsubmit="submitReview(event)">
+                <div class="form-group">
+                    <label for="reviewName">Your Name</label>
+                    <input type="text" id="reviewName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Rating</label>
+                    <div class="star-rating" id="starRating">
+                        <i class="far fa-star" onclick="setRating(1)"></i>
+                        <i class="far fa-star" onclick="setRating(2)"></i>
+                        <i class="far fa-star" onclick="setRating(3)"></i>
+                        <i class="far fa-star" onclick="setRating(4)"></i>
+                        <i class="far fa-star" onclick="setRating(5)"></i>
+                    </div>
+                    <input type="hidden" id="reviewRating" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="reviewComment">Your Review</label>
+                    <textarea id="reviewComment" rows="3" placeholder="Tell us about your experience..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reviewInstagram">Instagram Handle (Optional)</label>
+                    <div class="instagram-input">
+                        <span>@</span>
+                        <input type="text" id="reviewInstagram" placeholder="yourhandle">
+                    </div>
+                </div>
+                <div class="review-actions">
+                    <button type="button" class="btn-secondary" onclick="skipReview()">Skip</button>
+                    <button type="submit" class="btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item" onclick="showLanding()">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" onclick="showMenu()">
+            <i class="fas fa-utensils"></i>
+            <span>Menu</span>
+        </button>
+        <button class="nav-item" onclick="showCart()">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+            <span class="nav-badge" id="navCartBadge">0</span>
+        </button>
+        <button class="nav-item" onclick="showOrderTracking()">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Orders</span>
+        </button>
+    </nav>
+
+    <!-- Scripts - Modular Architecture -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui-customer.js"></script>
+    <script src="js/ui-admin.js"></script>
+    <script src="js/ui-kitchen.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

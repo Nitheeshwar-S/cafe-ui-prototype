@@ -39,10 +39,6 @@ const menuItemSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    sizes: [{
-        type: String,
-        enum: ['S', 'M', 'L', '6 pcs', '9 pcs', '12 pcs']
-    }],
     isAvailable: {
         type: Boolean,
         default: true

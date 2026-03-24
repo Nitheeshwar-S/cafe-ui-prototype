@@ -42,6 +42,10 @@ const reviewSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    isFeatured: {
+        type: Boolean,
+        default: false
+    },
     isReported: {
         type: Boolean,
         default: false
@@ -96,6 +100,7 @@ const reviewSchema = new mongoose.Schema({
 reviewSchema.index({ rating: 1 });
 reviewSchema.index({ createdAt: -1 });
 reviewSchema.index({ isApproved: 1, isVisible: 1 });
+reviewSchema.index({ isFeatured: 1, isApproved: 1 });
 reviewSchema.index({ sentiment: 1 });
 reviewSchema.index({ customerName: 'text', comment: 'text' });
 
@@ -157,6 +162,16 @@ reviewSchema.methods.reject = async function(reason = '') {
     this.isApproved = false;
     this.isVisible = false;
     this.adminNotes = reason;
+    return await this.save();
+};
+
+// Method to toggle featured status
+reviewSchema.methods.toggleFeatured = async function() {
+    // Can only feature approved reviews
+    if (!this.isApproved && !this.isFeatured) {
+        throw new Error('Cannot feature unapproved review');
+    }
+    this.isFeatured = !this.isFeatured;
     return await this.save();
 };
 

@@ -10,10 +10,6 @@ const comboItemSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    size: {
-        type: String,
-        enum: ['S', 'M', 'L', '6 pcs', '9 pcs', '12 pcs', '']
-    },
     quantity: {
         type: Number,
         default: 1,

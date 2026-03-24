@@ -195,7 +195,7 @@ router.get('/stats', async (req, res) => {
 });
 
 // @route   GET /api/reviews/featured
-// @desc    Get featured reviews (high rating, helpful)
+// @desc    Get featured reviews (admin-selected)
 // @access  Public
 router.get('/featured', async (req, res) => {
     try {
@@ -204,10 +204,9 @@ router.get('/featured', async (req, res) => {
         const featuredReviews = await Review.find({
             isApproved: true,
             isVisible: true,
-            rating: { $gte: 4 },
-            comment: { $exists: true, $ne: '' }
+            isFeatured: true
         })
-            .sort({ 'helpfulness.upvotes': -1, rating: -1, createdAt: -1 })
+            .sort({ createdAt: -1 })
             .limit(Number(limit))
             .select('customerName rating comment instagram createdAt tags -_id');
 
@@ -441,6 +440,56 @@ router.put('/:id/reject', async (req, res) => {
         });
     } catch (error) {
         console.error('Error rejecting review:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+    }
+});
+
+// @route   PUT /api/reviews/:id/feature
+// @desc    Toggle featured status - Admin only
+// @access  Private
+router.put('/:id/feature', async (req, res) => {
+    try {
+        const review = await Review.findById(req.params.id);
+
+        if (!review) {
+            return res.status(404).json({
+                success: false,
+                error: 'Review not found'
+            });
+        }
+
+        // Can only feature approved reviews
+        if (!review.isApproved && !review.isFeatured) {
+            return res.status(400).json({
+                success: false,
+                error: 'Cannot feature unapproved review. Please approve first.'
+            });
+        }
+
+        // Check max featured limit (10)
+        if (!review.isFeatured) {
+            const featuredCount = await Review.countDocuments({ isFeatured: true });
+            if (featuredCount >= 10) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Maximum 10 featured reviews allowed. Please unfeature another review first.'
+                });
+            }
+        }
+
+        review.isFeatured = !review.isFeatured;
+        await review.save();
+
+        res.status(200).json({
+            success: true,
+            message: review.isFeatured ? 'Review featured successfully' : 'Review unfeatured successfully',
+            data: review
+        });
+    } catch (error) {
+        console.error('Error toggling featured status:', error);
         res.status(500).json({
             success: false,
             error: 'Server Error'

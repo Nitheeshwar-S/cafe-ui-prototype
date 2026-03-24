@@ -12,18 +12,18 @@ router.post('/', async (req, res) => {
             customerName,
             customerEmail,
             customerPhone,
-            tableNumber,
             items,
             subtotal,
             tax,
             discount = 0,
             total,
             paymentMethod,
-            specialInstructions
+            specialInstructions,
+            promoId
         } = req.body;
 
         // Validate required fields
-        if (!customerName || !tableNumber || !items || items.length === 0) {
+        if (!customerName || !items || items.length === 0) {
             return res.status(400).json({
                 success: false,
                 error: 'Missing required fields'
@@ -42,16 +42,16 @@ router.post('/', async (req, res) => {
             customerName,
             customerEmail,
             customerPhone,
-            tableNumber,
             items,
             subtotal,
             tax,
             discount,
             total,
-            paymentMethod,
+            paymentMethod: paymentMethod || 'counter',
             specialInstructions,
+            promoId,
             estimatedReadyTime,
-            paymentStatus: paymentMethod === 'cash' ? 'pending' : 'paid'
+            paymentStatus: 'pending'
         });
 
         // Update combo order counts
@@ -99,7 +99,6 @@ router.get('/', async (req, res) => {
             status,
             paymentStatus,
             customerPhone,
-            tableNumber,
             startDate,
             endDate,
             sort = '-createdAt',
@@ -120,10 +119,6 @@ router.get('/', async (req, res) => {
 
         if (customerPhone) {
             filter.customerPhone = customerPhone;
-        }
-
-        if (tableNumber) {
-            filter.tableNumber = tableNumber;
         }
 
         if (startDate || endDate) {
@@ -238,7 +233,7 @@ router.put('/:id/payment', async (req, res) => {
     try {
         const { paymentStatus } = req.body;
 
-        const validPaymentStatuses = ['pending', 'paid', 'failed', 'refunded'];
+        const validPaymentStatuses = ['pending', 'paid', 'cancelled'];
         if (!validPaymentStatuses.includes(paymentStatus)) {
             return res.status(400).json({
                 success: false,
