@@ -1,947 +1,1567 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Café Cafeeto - Premium Coffee Experience</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="admin-mobile.css">
-    <link rel="stylesheet" href="css/new-components.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin-mobile.css" />
+    <link rel="stylesheet" href="css/new-components.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Login Page Styles */
+      .login-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .login-page.hidden {
+        display: none;
+      }
+
+      .login-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .login-logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: #f5f5f5;
+      }
+
+      .login-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .login-header h1 {
+        color: #333;
+        font-size: 28px;
+        margin: 0;
+        font-weight: 600;
+      }
+
+      .login-header p {
+        color: #666;
+        font-size: 14px;
+        margin: 5px 0 0 0;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        color: #333;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .form-group input {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .login-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+        margin-top: 10px;
+      }
+
+      .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .login-button:active {
+        transform: translateY(0);
+      }
+
+      .login-error {
+        color: #e74c3c;
+        font-size: 13px;
+        text-align: center;
+        display: none;
+        margin-top: 10px;
+      }
+
+      .login-error.show {
+        display: block;
+      }
+
+      .login-success {
+        color: #27ae60;
+        font-size: 13px;
+        text-align: center;
+        display: none;
+        margin-top: 10px;
+      }
+
+      .login-success.show {
+        display: block;
+      }
+
+      .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #666;
+        font-size: 13px;
+      }
+
+      .login-footer a {
+        color: #667eea;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .login-footer a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 30px 20px;
+        }
+
+        .login-header h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Page -->
+    <section id="loginPage" class="login-page">
+      <div class="login-container">
+        <div class="login-header">
+          <div class="login-logo">
+            <img src="CafeCoffeeto_Logo.jpg" alt="Café Cafeeto Logo" />
+          </div>
+          <h1>Café Cafeeto</h1>
+          <p>Welcome Back!</p>
+        </div>
+
+        <form class="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          <button type="submit" class="login-button">Sign In</button>
+
+          <div id="loginError" class="login-error"></div>
+          <div id="loginSuccess" class="login-success"></div>
+        </form>
+
+        <div class="login-footer">
+          <p>
+            Don't have an account?
+            <a onclick="toggleGuestMode()">Continue as Guest</a>
+          </p>
+          <p style="margin-top: 10px; font-size: 12px">
+            Demo: Use any email and password
+          </p>
+        </div>
+      </div>
+    </section>
+
     <!-- Header with Cart -->
     <header class="header hidden">
-        <div class="header-content">
-            <div class="header-location">
-                <div class="location-icon">
-                    <img src="CafeCoffeeto_Logo.jpg" alt="Café Cafeeto Logo" class="header-logo">
-                </div>
-                <div class="location-text">
-                    <div class="location-label">Welcome to</div>
-                    <div class="location-name">Café Cafeeto</div>
-                </div>
-            </div>
-            <button class="cart-button" onclick="showCart()">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="cartCount">0</span>
-            </button>
+      <div class="header-content">
+        <div class="header-location">
+          <div class="location-icon">
+            <img
+              src="CafeCoffeeto_Logo.jpg"
+              alt="Café Cafeeto Logo"
+              class="header-logo"
+            />
+          </div>
+          <div class="location-text">
+            <div class="location-label">Welcome to</div>
+            <div class="location-name">Café Cafeeto</div>
+          </div>
         </div>
+        <button class="cart-button" onclick="showCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
     </header>
 
     <!-- Landing Page -->
     <section id="landingPage" class="landing-page">
-        <div class="landing-overlay"></div>
-        <div class="landing-bg-image"></div>
-        
-        <!-- Animated Coffee Elements -->
-        <div class="coffee-beans coffee-bean-1"></div>
-        <div class="coffee-beans coffee-bean-2"></div>
-        <div class="coffee-beans coffee-bean-3"></div>
-        
-        <div class="landing-content">
-            <!-- Logo Section -->
-            <div class="landing-logo">
-                <div class="logo-container">
-                    <img src="CafeCoffeeto_Logo.jpg" alt="Café Cafeeto Logo" class="brand-logo" id="brandLogo" onload="this.classList.add('loaded')">
-                </div>
-            </div>
-            
-            <!-- Brand Name -->
-            <div class="brand-section">
-                <h1 class="brand-name">Café Cafeeto</h1>
-                <div class="brand-tagline">Premium Coffee Experience</div>
-            </div>
-            
-            <!-- Description -->
-            <p class="landing-description">
-                Indulge in artisanal coffee crafted with passion.<br>
-                From bean to cup, every moment is extraordinary.
-            </p>
-            
-            <!-- Lifestyle Taglines -->
-            <div class="lifestyle-section">
-                <div class="lifestyle-item">
-                    <i class="fas fa-comments"></i>
-                    <span>Coffee & Conversations</span>
-                </div>
-                <div class="lifestyle-item">
-                    <i class="fas fa-camera"></i>
-                    <span>Sharing Stories</span>
-                </div>
-                <div class="lifestyle-item">
-                    <i class="fas fa-globe-americas"></i>
-                    <span>Exploring Global Flavors</span>
-                </div>
-            </div>
+      <div class="landing-overlay"></div>
+      <div class="landing-bg-image"></div>
 
-            <!-- CTA Button -->
-            <button class="btn-primary landing-cta" onclick="showMenu()">
-                <span>Explore Menu</span>
-                <i class="fas fa-arrow-right"></i>
-            </button>
+      <!-- Animated Coffee Elements -->
+      <div class="coffee-beans coffee-bean-1"></div>
+      <div class="coffee-beans coffee-bean-2"></div>
+      <div class="coffee-beans coffee-bean-3"></div>
 
-            <!-- Customer Reviews Section -->
-            <div class="reviews-section" id="reviewsSection">
-                <h3 class="reviews-title">
-                    <i class="fas fa-heart"></i>
-                    What Our Customers Say
-                </h3>
-                <div class="reviews-carousel" id="reviewsCarousel">
-                    <!-- Reviews will be dynamically inserted here -->
-                    <div class="review-placeholder">
-                        <p>Be the first to leave a review!</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Info -->
-            <div class="landing-footer">
-                <div class="landing-info">
-                    <i class="fas fa-clock"></i>
-                    <span>Open Daily 7AM - 10PM</span>
-                </div>
-                <a href="https://www.instagram.com/cafe_coffeeto/" target="_blank" rel="noopener noreferrer" class="landing-hashtag">
-                    <i class="fab fa-instagram"></i>
-                    <span>@cafecoffeeto</span>
-                </a>
-            </div>
+      <div class="landing-content">
+        <!-- Logo Section -->
+        <div class="landing-logo">
+          <div class="logo-container">
+            <img
+              src="CafeCoffeeto_Logo.jpg"
+              alt="Café Cafeeto Logo"
+              class="brand-logo"
+              id="brandLogo"
+              onload="this.classList.add('loaded')"
+            />
+          </div>
         </div>
-        
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
+
+        <!-- Brand Name -->
+        <div class="brand-section">
+          <h1 class="brand-name">Café Cafeeto</h1>
+          <div class="brand-tagline">Premium Coffee Experience</div>
         </div>
+
+        <!-- Description -->
+        <p class="landing-description">
+          Indulge in artisanal coffee crafted with passion.<br />
+          From bean to cup, every moment is extraordinary.
+        </p>
+
+        <!-- Lifestyle Taglines -->
+        <div class="lifestyle-section">
+          <div class="lifestyle-item">
+            <i class="fas fa-comments"></i>
+            <span>Coffee & Conversations</span>
+          </div>
+          <div class="lifestyle-item">
+            <i class="fas fa-camera"></i>
+            <span>Sharing Stories</span>
+          </div>
+          <div class="lifestyle-item">
+            <i class="fas fa-globe-americas"></i>
+            <span>Exploring Global Flavors</span>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <button class="btn-primary landing-cta" onclick="showMenu()">
+          <span>Explore Menu</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <!-- Customer Reviews Section -->
+        <div class="reviews-section" id="reviewsSection">
+          <h3 class="reviews-title">
+            <i class="fas fa-heart"></i>
+            What Our Customers Say
+          </h3>
+          <div class="reviews-carousel" id="reviewsCarousel">
+            <!-- Reviews will be dynamically inserted here -->
+            <div class="review-placeholder">
+              <p>Be the first to leave a review!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="landing-footer">
+          <div class="landing-info">
+            <i class="fas fa-clock"></i>
+            <span>Open Daily 7AM - 10PM</span>
+          </div>
+          <a
+            href="https://www.instagram.com/cafe_coffeeto/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="landing-hashtag"
+          >
+            <i class="fab fa-instagram"></i>
+            <span>@cafecoffeeto</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator">
+        <i class="fas fa-chevron-down"></i>
+      </div>
     </section>
 
     <!-- Menu Page -->
     <section id="menuPage" class="menu-page hidden">
-        <!-- Header Section with Dark Background -->
-        <div class="menu-header">
-            <!-- Search Bar -->
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search coffee..." id="searchInput" onkeyup="searchMenu()">
-                <button class="filter-btn"><i class="fas fa-sliders-h"></i></button>
+      <!-- Header Section with Dark Background -->
+      <div class="menu-header">
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            placeholder="Search coffee..."
+            id="searchInput"
+            onkeyup="searchMenu()"
+          />
+          <button class="filter-btn"><i class="fas fa-sliders-h"></i></button>
+        </div>
+      </div>
+
+      <!-- Promo Banner with Overlap Effect -->
+      <div class="promo-banner-container">
+        <div class="promo-carousel">
+          <!-- Promo Slide 1: Yummy Combo -->
+          <div class="promo-banner promo-slide active">
+            <div class="promo-badge">Yummy Combo</div>
+            <div class="promo-content">
+              <h3>French Fries<br />+ Drink</h3>
+              <p class="promo-subtitle">Special Package - Only ₹150/-</p>
             </div>
+            <div class="promo-image skeleton-box">
+              <img
+                src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200&h=200&fit=crop"
+                alt="Fries and Coffee Combo"
+                onload="
+                  this.parentElement.classList.remove('skeleton-box');
+                  this.classList.add('loaded');
+                "
+                onerror="
+                  this.parentElement.classList.remove('skeleton-box');
+                  this.style.display = 'none';
+                "
+              />
+            </div>
+          </div>
+
+          <!-- Promo Slide 2: Discount -->
+          <div class="promo-banner promo-slide">
+            <div class="promo-badge">Special Deal</div>
+            <div class="promo-content">
+              <h3>30% OFF<br />Today Only</h3>
+              <p class="promo-subtitle">On espresso drinks</p>
+            </div>
+            <div class="promo-image skeleton-box">
+              <img
+                src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=200&h=200&fit=crop"
+                alt="Espresso"
+                onload="
+                  this.parentElement.classList.remove('skeleton-box');
+                  this.classList.add('loaded');
+                "
+                onerror="
+                  this.parentElement.classList.remove('skeleton-box');
+                  this.style.display = 'none';
+                "
+              />
+            </div>
+          </div>
+
+          <!-- Promo Slide 3: Free Item -->
+          <div class="promo-banner promo-slide">
+            <div class="promo-badge">New Member</div>
+            <div class="promo-content">
+              <h3>FREE Pastry<br />with Coffee</h3>
+              <p class="promo-subtitle">First order bonus</p>
+            </div>
+            <div class="promo-image skeleton-box">
+              <img
+                src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop&sat=-100"
+                alt="Pastry"
+                onload="
+                  this.parentElement.classList.remove('skeleton-box');
+                  this.classList.add('loaded');
+                "
+                onerror="
+                  this.parentElement.classList.remove('skeleton-box');
+                  this.style.display = 'none';
+                "
+              />
+            </div>
+          </div>
         </div>
 
-        <!-- Promo Banner with Overlap Effect -->
-        <div class="promo-banner-container">
-            <div class="promo-carousel">
-                <!-- Promo Slide 1: Yummy Combo -->
-                <div class="promo-banner promo-slide active">
-                    <div class="promo-badge">Yummy Combo</div>
-                    <div class="promo-content">
-                        <h3>French Fries<br>+ Drink</h3>
-                        <p class="promo-subtitle">Special Package - Only ₹150/-</p>
-                    </div>
-                    <div class="promo-image skeleton-box">
-                        <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200&h=200&fit=crop" 
-                             alt="Fries and Coffee Combo" 
-                             onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
-                             onerror="this.parentElement.classList.remove('skeleton-box'); this.style.display='none'">
-                    </div>
-                </div>
-                
-                <!-- Promo Slide 2: Discount -->
-                <div class="promo-banner promo-slide">
-                    <div class="promo-badge">Special Deal</div>
-                    <div class="promo-content">
-                        <h3>30% OFF<br>Today Only</h3>
-                        <p class="promo-subtitle">On espresso drinks</p>
-                    </div>
-                    <div class="promo-image skeleton-box">
-                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=200&h=200&fit=crop" 
-                             alt="Espresso" 
-                             onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
-                             onerror="this.parentElement.classList.remove('skeleton-box'); this.style.display='none'">
-                    </div>
-                </div>
-                
-                <!-- Promo Slide 3: Free Item -->
-                <div class="promo-banner promo-slide">
-                    <div class="promo-badge">New Member</div>
-                    <div class="promo-content">
-                        <h3>FREE Pastry<br>with Coffee</h3>
-                        <p class="promo-subtitle">First order bonus</p>
-                    </div>
-                    <div class="promo-image skeleton-box">
-                        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop&sat=-100" 
-                             alt="Pastry" 
-                             onload="this.parentElement.classList.remove('skeleton-box'); this.classList.add('loaded')"
-                             onerror="this.parentElement.classList.remove('skeleton-box'); this.style.display='none'">
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Promo Navigation Dots -->
-            <div class="promo-dots">
-                <span class="dot active" onclick="goToPromoSlide(0)"></span>
-                <span class="dot" onclick="goToPromoSlide(1)"></span>
-                <span class="dot" onclick="goToPromoSlide(2)"></span>
-            </div>
+        <!-- Promo Navigation Dots -->
+        <div class="promo-dots">
+          <span class="dot active" onclick="goToPromoSlide(0)"></span>
+          <span class="dot" onclick="goToPromoSlide(1)"></span>
+          <span class="dot" onclick="goToPromoSlide(2)"></span>
         </div>
+      </div>
 
-        <!-- Trending Stats Section -->
-        <div class="trending-stats">
-            <div class="trending-stat">
-                <span class="trending-value" id="trendingOrders">0</span>
-                <span class="trending-label">Orders Today</span>
-            </div>
-            <div class="trending-divider"></div>
-            <div class="trending-stat">
-                <span class="trending-value" id="trendingItems">30</span>
-                <span class="trending-label">Menu Items</span>
-            </div>
-            <div class="trending-divider"></div>
-            <div class="trending-stat">
-                <span class="trending-value" id="trendingRating">4.7</span>
-                <span class="trending-label">Rating</span>
-            </div>
+      <!-- Trending Stats Section -->
+      <div class="trending-stats">
+        <div class="trending-stat">
+          <span class="trending-value" id="trendingOrders">0</span>
+          <span class="trending-label">Orders Today</span>
         </div>
+        <div class="trending-divider"></div>
+        <div class="trending-stat">
+          <span class="trending-value" id="trendingItems">30</span>
+          <span class="trending-label">Menu Items</span>
+        </div>
+        <div class="trending-divider"></div>
+        <div class="trending-stat">
+          <span class="trending-value" id="trendingRating">4.7</span>
+          <span class="trending-label">Rating</span>
+        </div>
+      </div>
 
-        <!-- Category Filter Tabs -->
-        <div class="category-tabs">
-            <button class="tab-btn active" onclick="filterCategory('all', this)">All</button>
-            <button class="tab-btn" onclick="filterCategory('coffee', this)">Coffee</button>
-            <button class="tab-btn" onclick="filterCategory('beverages', this)">Beverages</button>
-            <button class="tab-btn" onclick="filterCategory('snacks', this)">Snacks</button>
-            <button class="tab-btn" onclick="filterCategory('combos', this)">Combos</button>
-            <button class="tab-btn" onclick="filterCategory('desserts', this)">Desserts</button>
-        </div>
+      <!-- Category Filter Tabs -->
+      <div class="category-tabs">
+        <button class="tab-btn active" onclick="filterCategory('all', this)">
+          All
+        </button>
+        <button class="tab-btn" onclick="filterCategory('coffee', this)">
+          Coffee
+        </button>
+        <button class="tab-btn" onclick="filterCategory('beverages', this)">
+          Beverages
+        </button>
+        <button class="tab-btn" onclick="filterCategory('snacks', this)">
+          Snacks
+        </button>
+        <button class="tab-btn" onclick="filterCategory('combos', this)">
+          Combos
+        </button>
+        <button class="tab-btn" onclick="filterCategory('desserts', this)">
+          Desserts
+        </button>
+      </div>
 
-        <!-- Diet Filter Toggle -->
-        <div class="diet-filter-container">
-            <div class="diet-filter-label">
-                <i class="fas fa-leaf"></i>
-                <span>Diet Preference</span>
-            </div>
-            <div class="diet-filter-buttons">
-                <button class="diet-filter-btn active" onclick="toggleDietFilter('all', this)">
-                    <i class="fas fa-utensils"></i>
-                    <span>All</span>
-                </button>
-                <button class="diet-filter-btn veg-btn" onclick="toggleDietFilter('veg', this)">
-                    <span class="veg-dot"></span>
-                    <span>Veg</span>
-                </button>
-                <button class="diet-filter-btn non-veg-btn" onclick="toggleDietFilter('non-veg', this)">
-                    <span class="non-veg-dot"></span>
-                    <span>Non-Veg</span>
-                </button>
-            </div>
+      <!-- Diet Filter Toggle -->
+      <div class="diet-filter-container">
+        <div class="diet-filter-label">
+          <i class="fas fa-leaf"></i>
+          <span>Diet Preference</span>
         </div>
+        <div class="diet-filter-buttons">
+          <button
+            class="diet-filter-btn active"
+            onclick="toggleDietFilter('all', this)"
+          >
+            <i class="fas fa-utensils"></i>
+            <span>All</span>
+          </button>
+          <button
+            class="diet-filter-btn veg-btn"
+            onclick="toggleDietFilter('veg', this)"
+          >
+            <span class="veg-dot"></span>
+            <span>Veg</span>
+          </button>
+          <button
+            class="diet-filter-btn non-veg-btn"
+            onclick="toggleDietFilter('non-veg', this)"
+          >
+            <span class="non-veg-dot"></span>
+            <span>Non-Veg</span>
+          </button>
+        </div>
+      </div>
 
-        <!-- Menu Items Grid -->
-        <div class="menu-container" id="menuContainer">
-            <!-- Menu items will be dynamically inserted here -->
-        </div>
+      <!-- Menu Items Grid -->
+      <div class="menu-container" id="menuContainer">
+        <!-- Menu items will be dynamically inserted here -->
+      </div>
     </section>
 
     <!-- Cart Page -->
     <section id="cartPage" class="cart-page hidden">
-        <div class="page-header">
-            <button class="back-btn" onclick="showMenu()">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <h2>Your Cart</h2>
-        </div>
-        
-        <div class="cart-items" id="cartItems">
-            <!-- Cart items will be dynamically inserted here -->
-        </div>
+      <div class="page-header">
+        <button class="back-btn" onclick="showMenu()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h2>Your Cart</h2>
+      </div>
 
-        <div class="cart-empty hidden" id="cartEmpty">
-            <i class="fas fa-shopping-cart"></i>
-            <p>Your cart is empty</p>
-            <button class="btn-secondary" onclick="showMenu()">Browse Menu</button>
-        </div>
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be dynamically inserted here -->
+      </div>
 
-        <div class="cart-summary" id="cartSummary">
-            <div class="summary-row">
-                <span>Subtotal</span>
-                <span id="subtotal">₹0</span>
-            </div>
-            <div class="summary-row">
-                <span>GST (5%)</span>
-                <span id="tax">₹0</span>
-            </div>
-            <div class="summary-row total">
-                <span>Total</span>
-                <span id="total">₹0</span>
-            </div>
-            <button class="btn-primary" onclick="showCheckout()">Proceed to Checkout</button>
+      <div class="cart-empty hidden" id="cartEmpty">
+        <i class="fas fa-shopping-cart"></i>
+        <p>Your cart is empty</p>
+        <button class="btn-secondary" onclick="showMenu()">Browse Menu</button>
+      </div>
+
+      <div class="cart-summary" id="cartSummary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">₹0</span>
         </div>
+        <div class="summary-row">
+          <span>GST (5%)</span>
+          <span id="tax">₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total">₹0</span>
+        </div>
+        <button class="btn-primary" onclick="showCheckout()">
+          Proceed to Checkout
+        </button>
+      </div>
     </section>
 
     <!-- Checkout Page -->
     <section id="checkoutPage" class="checkout-page hidden">
-        <div class="page-header">
-            <button class="back-btn" onclick="showCart()">
-                <i class="fas fa-arrow-left"></i>
+      <div class="page-header">
+        <button class="back-btn" onclick="showCart()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h2>Order</h2>
+      </div>
+
+      <div class="checkout-content">
+        <!-- Order Summary -->
+        <div class="order-summary-section">
+          <h3>Order Summary</h3>
+          <div class="summary-items" id="checkoutSummary">
+            <!-- Checkout items will be dynamically inserted here -->
+          </div>
+          <div class="summary-totals">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="checkoutSubtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+              <span>GST (5%)</span>
+              <span id="checkoutTax">₹0</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total</span>
+              <span id="checkoutTotal">₹0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Information Form -->
+        <div class="customer-info-section">
+          <h3>Your Information</h3>
+          <form id="checkoutForm" onsubmit="handleCheckout(event)">
+            <div class="form-group">
+              <label for="customerName">Name</label>
+              <input
+                type="text"
+                id="customerName"
+                required
+                placeholder="Enter your name"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="tableNumber">Table Number</label>
+              <input
+                type="text"
+                id="tableNumber"
+                required
+                placeholder="Enter table number"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="specialInstructions"
+                >Special Instructions (Optional)</label
+              >
+              <textarea
+                id="specialInstructions"
+                rows="3"
+                placeholder="Any special requests?"
+              ></textarea>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="payment-section">
+              <h4>Payment Method</h4>
+              <div class="payment-options">
+                <button
+                  type="button"
+                  class="payment-btn active"
+                  onclick="selectPayment('cash', this)"
+                >
+                  <i class="fas fa-money-bill-wave"></i>
+                  <span>Cash</span>
+                </button>
+                <button
+                  type="button"
+                  class="payment-btn"
+                  onclick="selectPayment('card', this)"
+                >
+                  <i class="fas fa-credit-card"></i>
+                  <span>Card</span>
+                </button>
+                <button
+                  type="button"
+                  class="payment-btn"
+                  onclick="selectPayment('wallet', this)"
+                >
+                  <i class="fas fa-wallet"></i>
+                  <span>E-Wallet</span>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary btn-place-order">
+              <i class="fas fa-check-circle"></i>
+              <span>Place Order</span>
             </button>
-            <h2>Order</h2>
+          </form>
         </div>
-
-        <div class="checkout-content">
-            <!-- Order Summary -->
-            <div class="order-summary-section">
-                <h3>Order Summary</h3>
-                <div class="summary-items" id="checkoutSummary">
-                    <!-- Checkout items will be dynamically inserted here -->
-                </div>
-                <div class="summary-totals">
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="checkoutSubtotal">₹0</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>GST (5%)</span>
-                        <span id="checkoutTax">₹0</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total</span>
-                        <span id="checkoutTotal">₹0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Customer Information Form -->
-            <div class="customer-info-section">
-                <h3>Your Information</h3>
-                <form id="checkoutForm" onsubmit="handleCheckout(event)">
-                    <div class="form-group">
-                        <label for="customerName">Name</label>
-                        <input type="text" id="customerName" required placeholder="Enter your name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="tableNumber">Table Number</label>
-                        <input type="text" id="tableNumber" required placeholder="Enter table number">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="specialInstructions">Special Instructions (Optional)</label>
-                        <textarea id="specialInstructions" rows="3" placeholder="Any special requests?"></textarea>
-                    </div>
-
-                    <!-- Payment Method -->
-                    <div class="payment-section">
-                        <h4>Payment Method</h4>
-                        <div class="payment-options">
-                            <button type="button" class="payment-btn active" onclick="selectPayment('cash', this)">
-                                <i class="fas fa-money-bill-wave"></i>
-                                <span>Cash</span>
-                            </button>
-                            <button type="button" class="payment-btn" onclick="selectPayment('card', this)">
-                                <i class="fas fa-credit-card"></i>
-                                <span>Card</span>
-                            </button>
-                            <button type="button" class="payment-btn" onclick="selectPayment('wallet', this)">
-                                <i class="fas fa-wallet"></i>
-                                <span>E-Wallet</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-primary btn-place-order">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Place Order</span>
-                    </button>
-                </form>
-            </div>
-        </div>
+      </div>
     </section>
 
     <!-- Order Confirmation Modal -->
     <div id="confirmationModal" class="modal hidden">
-        <div class="modal-content confirmation-modal">
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2>Order Confirmed!</h2>
-            <p>Thank you for your order</p>
-            <p class="order-number">Order #<span id="orderNumber"></span></p>
-            <p class="order-message">Your order will be ready soon</p>
-            <div class="estimated-time">
-                <i class="fas fa-clock"></i>
-                <span>Estimated time: 15-20 minutes</span>
-            </div>
-            <button class="btn-primary" onclick="showReviewModal()">
-                <i class="fas fa-star"></i>
-                <span>Leave a Review</span>
-            </button>
-            <button class="btn-secondary" onclick="skipReview()" style="margin-top: 10px;">
-                <span>Skip for Now</span>
-            </button>
+      <div class="modal-content confirmation-modal">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
         </div>
+        <h2>Order Confirmed!</h2>
+        <p>Thank you for your order</p>
+        <p class="order-number">Order #<span id="orderNumber"></span></p>
+        <p class="order-message">Your order will be ready soon</p>
+        <div class="estimated-time">
+          <i class="fas fa-clock"></i>
+          <span>Estimated time: 15-20 minutes</span>
+        </div>
+        <button class="btn-primary" onclick="showReviewModal()">
+          <i class="fas fa-star"></i>
+          <span>Leave a Review</span>
+        </button>
+        <button
+          class="btn-secondary"
+          onclick="skipReview()"
+          style="margin-top: 10px"
+        >
+          <span>Skip for Now</span>
+        </button>
+      </div>
     </div>
 
     <!-- Review Modal -->
     <div id="reviewModal" class="modal hidden">
-        <div class="modal-content review-modal">
-            <button class="close-btn" onclick="closeReviewModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="review-header">
-                <i class="fas fa-star"></i>
-                <h2>How was your experience?</h2>
-                <p>We'd love to hear from you!</p>
-            </div>
-            <form id="reviewForm" onsubmit="submitReview(event)">
-                <div class="form-group">
-                    <label for="reviewName">Your Name</label>
-                    <input type="text" id="reviewName" required placeholder="Enter your name">
-                </div>
-
-                <div class="form-group">
-                    <label>Rating</label>
-                    <div class="star-rating" id="starRating">
-                        <i class="far fa-star" data-rating="1" onclick="setRating(1)"></i>
-                        <i class="far fa-star" data-rating="2" onclick="setRating(2)"></i>
-                        <i class="far fa-star" data-rating="3" onclick="setRating(3)"></i>
-                        <i class="far fa-star" data-rating="4" onclick="setRating(4)"></i>
-                        <i class="far fa-star" data-rating="5" onclick="setRating(5)"></i>
-                    </div>
-                    <input type="hidden" id="reviewRating" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="reviewComment">Your Feedback</label>
-                    <textarea id="reviewComment" required rows="4" placeholder="Tell us about your experience..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="reviewInstagram">Instagram Handle (Optional)</label>
-                    <div class="instagram-input">
-                        <span>@</span>
-                        <input type="text" id="reviewInstagram" placeholder="your_handle">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Submit Review</span>
-                </button>
-            </form>
+      <div class="modal-content review-modal">
+        <button class="close-btn" onclick="closeReviewModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="review-header">
+          <i class="fas fa-star"></i>
+          <h2>How was your experience?</h2>
+          <p>We'd love to hear from you!</p>
         </div>
+        <form id="reviewForm" onsubmit="submitReview(event)">
+          <div class="form-group">
+            <label for="reviewName">Your Name</label>
+            <input
+              type="text"
+              id="reviewName"
+              required
+              placeholder="Enter your name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Rating</label>
+            <div class="star-rating" id="starRating">
+              <i class="far fa-star" data-rating="1" onclick="setRating(1)"></i>
+              <i class="far fa-star" data-rating="2" onclick="setRating(2)"></i>
+              <i class="far fa-star" data-rating="3" onclick="setRating(3)"></i>
+              <i class="far fa-star" data-rating="4" onclick="setRating(4)"></i>
+              <i class="far fa-star" data-rating="5" onclick="setRating(5)"></i>
+            </div>
+            <input type="hidden" id="reviewRating" required />
+          </div>
+
+          <div class="form-group">
+            <label for="reviewComment">Your Feedback</label>
+            <textarea
+              id="reviewComment"
+              required
+              rows="4"
+              placeholder="Tell us about your experience..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="reviewInstagram">Instagram Handle (Optional)</label>
+            <div class="instagram-input">
+              <span>@</span>
+              <input
+                type="text"
+                id="reviewInstagram"
+                placeholder="your_handle"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-paper-plane"></i>
+            <span>Submit Review</span>
+          </button>
+        </form>
+      </div>
     </div>
 
     <!-- Admin Login Modal -->
     <div id="adminModal" class="modal hidden">
-        <div class="modal-content admin-modal">
-            <button class="close-btn" onclick="closeAdminModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="admin-header">
-                <i class="fas fa-user-shield"></i>
-                <h2>Admin Login</h2>
-            </div>
-            <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label for="adminUsername">
-                        <i class="fas fa-user"></i>
-                        Username
-                    </label>
-                    <input type="text" id="adminUsername" required placeholder="Enter username" autocomplete="off">
-                </div>
-
-                <div class="form-group">
-                    <label for="adminPassword">
-                        <i class="fas fa-lock"></i>
-                        Password
-                    </label>
-                    <input type="password" id="adminPassword" required placeholder="Enter password" autocomplete="off">
-                </div>
-
-                <div class="admin-error hidden" id="adminError">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span id="adminErrorMessage">Invalid credentials</span>
-                </div>
-
-                <button type="submit" class="btn-primary btn-admin-login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span>Login</span>
-                </button>
-            </form>
+      <div class="modal-content admin-modal">
+        <button class="close-btn" onclick="closeAdminModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="admin-header">
+          <i class="fas fa-user-shield"></i>
+          <h2>Admin Login</h2>
         </div>
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label for="adminUsername">
+              <i class="fas fa-user"></i>
+              Username
+            </label>
+            <input
+              type="text"
+              id="adminUsername"
+              required
+              placeholder="Enter username"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="adminPassword">
+              <i class="fas fa-lock"></i>
+              Password
+            </label>
+            <input
+              type="password"
+              id="adminPassword"
+              required
+              placeholder="Enter password"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="admin-error hidden" id="adminError">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="adminErrorMessage">Invalid credentials</span>
+          </div>
+
+          <button type="submit" class="btn-primary btn-admin-login">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Login</span>
+          </button>
+        </form>
+      </div>
     </div>
 
     <!-- Admin Dashboard Page -->
     <section id="adminPage" class="admin-page hidden">
-        <div class="admin-container">
-            <!-- Admin Header -->
-            <div class="admin-header">
-                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                    <button class="back-btn" onclick="logoutAdmin()" style="background: rgba(255,255,255,0.2); color: white;">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                    <div style="text-align: center; flex: 1;">
-                        <h1>Admin Dashboard</h1>
-                        <p>Café Cafeeto Management</p>
-                    </div>
-                    <div style="width: 44px;"></div>
-                </div>
+      <div class="admin-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+            "
+          >
+            <button
+              class="back-btn"
+              onclick="logoutAdmin()"
+              style="background: rgba(255, 255, 255, 0.2); color: white"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+            <div style="text-align: center; flex: 1">
+              <h1>Admin Dashboard</h1>
+              <p>Café Cafeeto Management</p>
             </div>
-
-            <div class="admin-content" style="padding: 0;">
-                <!-- Stats Row -->
-                <div class="admin-stats-row" style="margin-top: var(--spacing-md);">
-                    <div class="admin-stat-card primary">
-                        <span class="stat-value counting" id="totalOrders">0</span>
-                        <span class="stat-label">Orders Today</span>
-                    </div>
-                    <div class="admin-stat-card">
-                        <span class="stat-value counting" id="totalRevenue">₹0</span>
-                        <span class="stat-label">Revenue</span>
-                    </div>
-                    <div class="admin-stat-card">
-                        <span class="stat-value">4.7</span>
-                        <span class="stat-label">Avg Rating</span>
-                    </div>
-                </div>
-
-                <!-- Navigation Cards -->
-                <div class="admin-nav-grid">
-                    <div class="admin-nav-card ripple press-scale" onclick="showMenuManagement()">
-                        <div class="nav-icon">
-                            <i class="fas fa-utensils"></i>
-                        </div>
-                        <span class="nav-title">Menu Items</span>
-                        <span class="nav-count" id="menuItemsCount">30 items</span>
-                    </div>
-
-                    <div class="admin-nav-card ripple press-scale" onclick="showComboManagement()">
-                        <div class="nav-icon">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                        <span class="nav-title">Combos</span>
-                        <span class="nav-count" id="combosCount">5 combos</span>
-                    </div>
-
-                    <div class="admin-nav-card ripple press-scale" onclick="showOrdersManagement()">
-                        <div class="nav-icon">
-                            <i class="fas fa-receipt"></i>
-                        </div>
-                        <span class="nav-title">Orders</span>
-                        <span class="nav-count" id="ordersCount">View all</span>
-                    </div>
-
-                    <div class="admin-nav-card ripple press-scale" onclick="showAnalytics()">
-                        <div class="nav-icon">
-                            <i class="fas fa-chart-bar"></i>
-                        </div>
-                        <span class="nav-title">Analytics</span>
-                        <span class="nav-count">Reports</span>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div style="padding: var(--spacing-md);">
-                    <h3 style="font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: var(--spacing-sm);">
-                        <i class="fas fa-bolt" style="color: var(--primary-color);"></i> Quick Actions
-                    </h3>
-                    <div style="display: flex; gap: var(--spacing-sm);">
-                        <button class="btn btn-primary" onclick="showAdminMenuModal()" style="flex: 1;">
-                            <i class="fas fa-plus"></i> Add Item
-                        </button>
-                        <button class="btn btn-outline" onclick="showAdminComboModal()" style="flex: 1;">
-                            <i class="fas fa-plus"></i> Add Combo
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Recent Orders Preview -->
-                <div style="padding: 0 var(--spacing-md) var(--spacing-md);">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-sm);">
-                        <h3 style="font-size: 1rem; font-weight: 600; color: var(--text-dark);">
-                            <i class="fas fa-clock" style="color: var(--primary-color);"></i> Recent Orders
-                        </h3>
-                        <button class="btn btn-secondary" onclick="showOrdersManagement()" style="padding: var(--spacing-xs) var(--spacing-sm); min-height: 32px; font-size: 0.8rem;">
-                            View All
-                        </button>
-                    </div>
-                    <div class="admin-orders" id="adminOrders">
-                        <div class="empty-state" style="padding: var(--spacing-lg);">
-                            <div class="empty-state-icon">
-                                <i class="fas fa-receipt"></i>
-                            </div>
-                            <p class="empty-state-title">No orders yet</p>
-                            <p class="empty-state-text">Orders will appear here</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div style="width: 44px"></div>
+          </div>
         </div>
+
+        <div class="admin-content" style="padding: 0">
+          <!-- Stats Row -->
+          <div class="admin-stats-row" style="margin-top: var(--spacing-md)">
+            <div class="admin-stat-card primary">
+              <span class="stat-value counting" id="totalOrders">0</span>
+              <span class="stat-label">Orders Today</span>
+            </div>
+            <div class="admin-stat-card">
+              <span class="stat-value counting" id="totalRevenue">₹0</span>
+              <span class="stat-label">Revenue</span>
+            </div>
+            <div class="admin-stat-card">
+              <span class="stat-value">4.7</span>
+              <span class="stat-label">Avg Rating</span>
+            </div>
+          </div>
+
+          <!-- Navigation Cards -->
+          <div class="admin-nav-grid">
+            <div
+              class="admin-nav-card ripple press-scale"
+              onclick="showMenuManagement()"
+            >
+              <div class="nav-icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <span class="nav-title">Menu Items</span>
+              <span class="nav-count" id="menuItemsCount">30 items</span>
+            </div>
+
+            <div
+              class="admin-nav-card ripple press-scale"
+              onclick="showComboManagement()"
+            >
+              <div class="nav-icon">
+                <i class="fas fa-layer-group"></i>
+              </div>
+              <span class="nav-title">Combos</span>
+              <span class="nav-count" id="combosCount">5 combos</span>
+            </div>
+
+            <div
+              class="admin-nav-card ripple press-scale"
+              onclick="showOrdersManagement()"
+            >
+              <div class="nav-icon">
+                <i class="fas fa-receipt"></i>
+              </div>
+              <span class="nav-title">Orders</span>
+              <span class="nav-count" id="ordersCount">View all</span>
+            </div>
+
+            <div
+              class="admin-nav-card ripple press-scale"
+              onclick="showAnalytics()"
+            >
+              <div class="nav-icon">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <span class="nav-title">Analytics</span>
+              <span class="nav-count">Reports</span>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div style="padding: var(--spacing-md)">
+            <h3
+              style="
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--text-dark);
+                margin-bottom: var(--spacing-sm);
+              "
+            >
+              <i class="fas fa-bolt" style="color: var(--primary-color)"></i>
+              Quick Actions
+            </h3>
+            <div style="display: flex; gap: var(--spacing-sm)">
+              <button
+                class="btn btn-primary"
+                onclick="showAdminMenuModal()"
+                style="flex: 1"
+              >
+                <i class="fas fa-plus"></i> Add Item
+              </button>
+              <button
+                class="btn btn-outline"
+                onclick="showAdminComboModal()"
+                style="flex: 1"
+              >
+                <i class="fas fa-plus"></i> Add Combo
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Orders Preview -->
+          <div style="padding: 0 var(--spacing-md) var(--spacing-md)">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: var(--spacing-sm);
+              "
+            >
+              <h3
+                style="
+                  font-size: 1rem;
+                  font-weight: 600;
+                  color: var(--text-dark);
+                "
+              >
+                <i class="fas fa-clock" style="color: var(--primary-color)"></i>
+                Recent Orders
+              </h3>
+              <button
+                class="btn btn-secondary"
+                onclick="showOrdersManagement()"
+                style="
+                  padding: var(--spacing-xs) var(--spacing-sm);
+                  min-height: 32px;
+                  font-size: 0.8rem;
+                "
+              >
+                View All
+              </button>
+            </div>
+            <div class="admin-orders" id="adminOrders">
+              <div class="empty-state" style="padding: var(--spacing-lg)">
+                <div class="empty-state-icon">
+                  <i class="fas fa-receipt"></i>
+                </div>
+                <p class="empty-state-title">No orders yet</p>
+                <p class="empty-state-text">Orders will appear here</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Menu Management Page -->
     <section id="menuManagementPage" class="admin-page hidden">
-        <div class="admin-container">
-            <div class="back-nav">
-                <button class="back-btn" onclick="showAdminDashboard()">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2>Menu Items</h2>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="admin-search-bar">
-                <div class="search-input-wrapper">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="search-input" placeholder="Search menu items..." id="menuSearchInput" oninput="filterMenuItems(this.value)">
-                </div>
-            </div>
-
-            <!-- Category Filter Pills -->
-            <div style="padding: 0 var(--spacing-md); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;">
-                <div style="display: inline-flex; gap: var(--spacing-xs); padding: var(--spacing-sm) 0;">
-                    <button class="btn btn-primary category-pill active" data-category="all" onclick="filterMenuByCategory('all', this)" style="padding: 8px 16px; min-height: 36px; font-size: 0.85rem; border-radius: var(--border-radius-full);">All</button>
-                    <button class="btn btn-secondary category-pill" data-category="coffee" onclick="filterMenuByCategory('coffee', this)" style="padding: 8px 16px; min-height: 36px; font-size: 0.85rem; border-radius: var(--border-radius-full);">Coffee</button>
-                    <button class="btn btn-secondary category-pill" data-category="beverages" onclick="filterMenuByCategory('beverages', this)" style="padding: 8px 16px; min-height: 36px; font-size: 0.85rem; border-radius: var(--border-radius-full);">Beverages</button>
-                    <button class="btn btn-secondary category-pill" data-category="snacks" onclick="filterMenuByCategory('snacks', this)" style="padding: 8px 16px; min-height: 36px; font-size: 0.85rem; border-radius: var(--border-radius-full);">Snacks</button>
-                    <button class="btn btn-secondary category-pill" data-category="desserts" onclick="filterMenuByCategory('desserts', this)" style="padding: 8px 16px; min-height: 36px; font-size: 0.85rem; border-radius: var(--border-radius-full);">Desserts</button>
-                </div>
-            </div>
-
-            <!-- Items Grid -->
-            <div class="admin-items-grid" id="menuItemsGrid">
-                <!-- Items will be populated by JavaScript -->
-            </div>
-
-            <!-- FAB for adding new item -->
-            <button class="fab" onclick="showAddMenuItemSheet()">
-                <i class="fas fa-plus"></i>
-            </button>
+      <div class="admin-container">
+        <div class="back-nav">
+          <button class="back-btn" onclick="showAdminDashboard()">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2>Menu Items</h2>
         </div>
+
+        <!-- Search Bar -->
+        <div class="admin-search-bar">
+          <div class="search-input-wrapper">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search menu items..."
+              id="menuSearchInput"
+              oninput="filterMenuItems(this.value)"
+            />
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div
+          style="
+            padding: 0 var(--spacing-md);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+          "
+        >
+          <div
+            style="
+              display: inline-flex;
+              gap: var(--spacing-xs);
+              padding: var(--spacing-sm) 0;
+            "
+          >
+            <button
+              class="btn btn-primary category-pill active"
+              data-category="all"
+              onclick="filterMenuByCategory('all', this)"
+              style="
+                padding: 8px 16px;
+                min-height: 36px;
+                font-size: 0.85rem;
+                border-radius: var(--border-radius-full);
+              "
+            >
+              All
+            </button>
+            <button
+              class="btn btn-secondary category-pill"
+              data-category="coffee"
+              onclick="filterMenuByCategory('coffee', this)"
+              style="
+                padding: 8px 16px;
+                min-height: 36px;
+                font-size: 0.85rem;
+                border-radius: var(--border-radius-full);
+              "
+            >
+              Coffee
+            </button>
+            <button
+              class="btn btn-secondary category-pill"
+              data-category="beverages"
+              onclick="filterMenuByCategory('beverages', this)"
+              style="
+                padding: 8px 16px;
+                min-height: 36px;
+                font-size: 0.85rem;
+                border-radius: var(--border-radius-full);
+              "
+            >
+              Beverages
+            </button>
+            <button
+              class="btn btn-secondary category-pill"
+              data-category="snacks"
+              onclick="filterMenuByCategory('snacks', this)"
+              style="
+                padding: 8px 16px;
+                min-height: 36px;
+                font-size: 0.85rem;
+                border-radius: var(--border-radius-full);
+              "
+            >
+              Snacks
+            </button>
+            <button
+              class="btn btn-secondary category-pill"
+              data-category="desserts"
+              onclick="filterMenuByCategory('desserts', this)"
+              style="
+                padding: 8px 16px;
+                min-height: 36px;
+                font-size: 0.85rem;
+                border-radius: var(--border-radius-full);
+              "
+            >
+              Desserts
+            </button>
+          </div>
+        </div>
+
+        <!-- Items Grid -->
+        <div class="admin-items-grid" id="menuItemsGrid">
+          <!-- Items will be populated by JavaScript -->
+        </div>
+
+        <!-- FAB for adding new item -->
+        <button class="fab" onclick="showAddMenuItemSheet()">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
     </section>
 
     <!-- Combo Management Page -->
     <section id="comboManagementPage" class="admin-page hidden">
-        <div class="admin-container">
-            <div class="back-nav">
-                <button class="back-btn" onclick="showAdminDashboard()">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2>Combo Offers</h2>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="admin-search-bar">
-                <div class="search-input-wrapper">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="search-input" placeholder="Search combos..." id="comboSearchInput" oninput="filterCombos(this.value)">
-                </div>
-            </div>
-
-            <!-- Combos Grid -->
-            <div class="admin-items-grid" id="combosGrid">
-                <!-- Combos will be populated by JavaScript -->
-            </div>
-
-            <!-- FAB for adding new combo -->
-            <button class="fab" onclick="showAddComboSheet()">
-                <i class="fas fa-plus"></i>
-            </button>
+      <div class="admin-container">
+        <div class="back-nav">
+          <button class="back-btn" onclick="showAdminDashboard()">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2>Combo Offers</h2>
         </div>
+
+        <!-- Search Bar -->
+        <div class="admin-search-bar">
+          <div class="search-input-wrapper">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search combos..."
+              id="comboSearchInput"
+              oninput="filterCombos(this.value)"
+            />
+          </div>
+        </div>
+
+        <!-- Combos Grid -->
+        <div class="admin-items-grid" id="combosGrid">
+          <!-- Combos will be populated by JavaScript -->
+        </div>
+
+        <!-- FAB for adding new combo -->
+        <button class="fab" onclick="showAddComboSheet()">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
     </section>
 
     <!-- Orders Management Page -->
     <section id="ordersManagementPage" class="admin-page hidden">
-        <div class="admin-container">
-            <div class="back-nav">
-                <button class="back-btn" onclick="showAdminDashboard()">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h2>All Orders</h2>
-            </div>
-
-            <!-- Orders List -->
-            <div style="padding: var(--spacing-md);" id="allOrdersList">
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="fas fa-receipt"></i>
-                    </div>
-                    <p class="empty-state-title">No orders yet</p>
-                    <p class="empty-state-text">Orders will appear here when customers place them</p>
-                </div>
-            </div>
+      <div class="admin-container">
+        <div class="back-nav">
+          <button class="back-btn" onclick="showAdminDashboard()">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2>All Orders</h2>
         </div>
+
+        <!-- Orders List -->
+        <div style="padding: var(--spacing-md)" id="allOrdersList">
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="fas fa-receipt"></i>
+            </div>
+            <p class="empty-state-title">No orders yet</p>
+            <p class="empty-state-text">
+              Orders will appear here when customers place them
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Bottom Sheet for Add/Edit Menu Item -->
-    <div class="bottom-sheet-overlay" id="menuItemSheetOverlay" onclick="closeMenuItemSheet()"></div>
+    <div
+      class="bottom-sheet-overlay"
+      id="menuItemSheetOverlay"
+      onclick="closeMenuItemSheet()"
+    ></div>
     <div class="bottom-sheet" id="menuItemSheet">
-        <div class="bottom-sheet-handle"></div>
-        <div class="bottom-sheet-header">
-            <h3 id="menuItemSheetTitle">Add Menu Item</h3>
-            <button class="bottom-sheet-close" onclick="closeMenuItemSheet()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="bottom-sheet-content">
-            <form id="menuItemForm" onsubmit="saveMenuItemFromSheet(event)">
-                <input type="hidden" id="editMenuItemId">
-                <div class="form-group">
-                    <label class="form-label">Item Name</label>
-                    <input type="text" class="form-input" id="sheetItemName" placeholder="Enter item name" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" id="sheetItemDescription" placeholder="Enter description" rows="3"></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
-                    <div class="form-group">
-                        <label class="form-label">Price (₹)</label>
-                        <input type="number" class="form-input" id="sheetItemPrice" placeholder="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <select class="form-select" id="sheetItemCategory" required>
-                            <option value="">Select</option>
-                            <option value="coffee">Coffee</option>
-                            <option value="beverages">Beverages</option>
-                            <option value="snacks">Snacks</option>
-                            <option value="desserts">Desserts</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Image URL</label>
-                    <input type="url" class="form-input" id="sheetItemImage" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Diet Type</label>
-                    <div style="display: flex; gap: var(--spacing-md);">
-                        <label style="display: flex; align-items: center; gap: var(--spacing-xs); cursor: pointer;">
-                            <input type="radio" name="dietType" value="veg" id="sheetItemVeg" checked>
-                            <span style="color: var(--success);">🟢 Veg</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: var(--spacing-xs); cursor: pointer;">
-                            <input type="radio" name="dietType" value="non-veg" id="sheetItemNonVeg">
-                            <span style="color: var(--error);">🔴 Non-Veg</span>
-                        </label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="bottom-sheet-footer">
-            <button type="submit" form="menuItemForm" class="btn btn-primary btn-block">
-                <i class="fas fa-check"></i> Save Item
-            </button>
-        </div>
+      <div class="bottom-sheet-handle"></div>
+      <div class="bottom-sheet-header">
+        <h3 id="menuItemSheetTitle">Add Menu Item</h3>
+        <button class="bottom-sheet-close" onclick="closeMenuItemSheet()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="bottom-sheet-content">
+        <form id="menuItemForm" onsubmit="saveMenuItemFromSheet(event)">
+          <input type="hidden" id="editMenuItemId" />
+          <div class="form-group">
+            <label class="form-label">Item Name</label>
+            <input
+              type="text"
+              class="form-input"
+              id="sheetItemName"
+              placeholder="Enter item name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea
+              class="form-textarea"
+              id="sheetItemDescription"
+              placeholder="Enter description"
+              rows="3"
+            ></textarea>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: var(--spacing-md);
+            "
+          >
+            <div class="form-group">
+              <label class="form-label">Price (₹)</label>
+              <input
+                type="number"
+                class="form-input"
+                id="sheetItemPrice"
+                placeholder="0"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="sheetItemCategory" required>
+                <option value="">Select</option>
+                <option value="coffee">Coffee</option>
+                <option value="beverages">Beverages</option>
+                <option value="snacks">Snacks</option>
+                <option value="desserts">Desserts</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input
+              type="url"
+              class="form-input"
+              id="sheetItemImage"
+              placeholder="https://..."
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Diet Type</label>
+            <div style="display: flex; gap: var(--spacing-md)">
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: var(--spacing-xs);
+                  cursor: pointer;
+                "
+              >
+                <input
+                  type="radio"
+                  name="dietType"
+                  value="veg"
+                  id="sheetItemVeg"
+                  checked
+                />
+                <span style="color: var(--success)">🟢 Veg</span>
+              </label>
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: var(--spacing-xs);
+                  cursor: pointer;
+                "
+              >
+                <input
+                  type="radio"
+                  name="dietType"
+                  value="non-veg"
+                  id="sheetItemNonVeg"
+                />
+                <span style="color: var(--error)">🔴 Non-Veg</span>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="bottom-sheet-footer">
+        <button
+          type="submit"
+          form="menuItemForm"
+          class="btn btn-primary btn-block"
+        >
+          <i class="fas fa-check"></i> Save Item
+        </button>
+      </div>
     </div>
 
     <!-- Bottom Sheet for Add/Edit Combo -->
-    <div class="bottom-sheet-overlay" id="comboSheetOverlay" onclick="closeComboSheet()"></div>
+    <div
+      class="bottom-sheet-overlay"
+      id="comboSheetOverlay"
+      onclick="closeComboSheet()"
+    ></div>
     <div class="bottom-sheet" id="comboSheet">
-        <div class="bottom-sheet-handle"></div>
-        <div class="bottom-sheet-header">
-            <h3 id="comboSheetTitle">Add Combo</h3>
-            <button class="bottom-sheet-close" onclick="closeComboSheet()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="bottom-sheet-content">
-            <form id="comboForm" onsubmit="saveComboFromSheet(event)">
-                <input type="hidden" id="editComboId">
-                <div class="form-group">
-                    <label class="form-label">Combo Name</label>
-                    <input type="text" class="form-input" id="sheetComboName" placeholder="Enter combo name" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" id="sheetComboDescription" placeholder="Enter description" rows="2"></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
-                    <div class="form-group">
-                        <label class="form-label">Original Price (₹)</label>
-                        <input type="number" class="form-input" id="sheetComboOriginalPrice" placeholder="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Combo Price (₹)</label>
-                        <input type="number" class="form-input" id="sheetComboPrice" placeholder="0" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Image URL</label>
-                    <input type="url" class="form-input" id="sheetComboImage" placeholder="https://...">
-                </div>
-            </form>
-        </div>
-        <div class="bottom-sheet-footer">
-            <button type="submit" form="comboForm" class="btn btn-primary btn-block">
-                <i class="fas fa-check"></i> Save Combo
-            </button>
-        </div>
+      <div class="bottom-sheet-handle"></div>
+      <div class="bottom-sheet-header">
+        <h3 id="comboSheetTitle">Add Combo</h3>
+        <button class="bottom-sheet-close" onclick="closeComboSheet()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="bottom-sheet-content">
+        <form id="comboForm" onsubmit="saveComboFromSheet(event)">
+          <input type="hidden" id="editComboId" />
+          <div class="form-group">
+            <label class="form-label">Combo Name</label>
+            <input
+              type="text"
+              class="form-input"
+              id="sheetComboName"
+              placeholder="Enter combo name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea
+              class="form-textarea"
+              id="sheetComboDescription"
+              placeholder="Enter description"
+              rows="2"
+            ></textarea>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: var(--spacing-md);
+            "
+          >
+            <div class="form-group">
+              <label class="form-label">Original Price (₹)</label>
+              <input
+                type="number"
+                class="form-input"
+                id="sheetComboOriginalPrice"
+                placeholder="0"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Combo Price (₹)</label>
+              <input
+                type="number"
+                class="form-input"
+                id="sheetComboPrice"
+                placeholder="0"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Image URL</label>
+            <input
+              type="url"
+              class="form-input"
+              id="sheetComboImage"
+              placeholder="https://..."
+            />
+          </div>
+        </form>
+      </div>
+      <div class="bottom-sheet-footer">
+        <button
+          type="submit"
+          form="comboForm"
+          class="btn btn-primary btn-block"
+        >
+          <i class="fas fa-check"></i> Save Combo
+        </button>
+      </div>
     </div>
 
     <!-- Item Detail Modal -->
     <div id="itemModal" class="modal hidden">
-        <div class="modal-content item-modal">
-            <button class="close-btn" onclick="closeItemModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="item-detail-image" id="modalItemImage"></div>
-            <h2 id="modalItemName"></h2>
-            <div class="item-rating-modal">
-                <i class="fas fa-star rating-star"></i>
-                <span id="modalItemRating">4.8</span>
-            </div>
-            <p class="item-detail-description" id="modalItemDescription"></p>
-            
-            <!-- Size Selection -->
-            <div class="size-section" id="sizeSection">
-                <h4>Size</h4>
-                <div class="size-options" id="sizeOptions">
-                    <!-- Sizes will be added dynamically -->
-                </div>
-            </div>
-            
-            <p class="item-detail-price" id="modalItemPrice"></p>
-            <div class="quantity-selector">
-                <button onclick="decreaseQuantity()">-</button>
-                <input type="number" id="itemQuantity" value="1" min="1" readonly>
-                <button onclick="increaseQuantity()">+</button>
-            </div>
-            
-            <!-- Special Instructions for this item -->
-            <div class="special-instructions-section">
-                <label for="itemSpecialInstructions">
-                    <i class="fas fa-edit"></i>
-                    Special Instructions (Optional)
-                </label>
-                <textarea 
-                    id="itemSpecialInstructions" 
-                    rows="2" 
-                    placeholder="e.g., No sugar, Extra hot, Less ice..."
-                    maxlength="150"></textarea>
-                <div class="char-count">
-                    <span id="charCount">0</span>/150
-                </div>
-            </div>
-            
-            <button class="btn-primary" onclick="addToCartFromModal()">
-                <i class="fas fa-shopping-bag"></i>
-                <span>Add to Cart</span>
-            </button>
+      <div class="modal-content item-modal">
+        <button class="close-btn" onclick="closeItemModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="item-detail-image" id="modalItemImage"></div>
+        <h2 id="modalItemName"></h2>
+        <div class="item-rating-modal">
+          <i class="fas fa-star rating-star"></i>
+          <span id="modalItemRating">4.8</span>
         </div>
+        <p class="item-detail-description" id="modalItemDescription"></p>
+
+        <!-- Size Selection -->
+        <div class="size-section" id="sizeSection">
+          <h4>Size</h4>
+          <div class="size-options" id="sizeOptions">
+            <!-- Sizes will be added dynamically -->
+          </div>
+        </div>
+
+        <p class="item-detail-price" id="modalItemPrice"></p>
+        <div class="quantity-selector">
+          <button onclick="decreaseQuantity()">-</button>
+          <input type="number" id="itemQuantity" value="1" min="1" readonly />
+          <button onclick="increaseQuantity()">+</button>
+        </div>
+
+        <!-- Special Instructions for this item -->
+        <div class="special-instructions-section">
+          <label for="itemSpecialInstructions">
+            <i class="fas fa-edit"></i>
+            Special Instructions (Optional)
+          </label>
+          <textarea
+            id="itemSpecialInstructions"
+            rows="2"
+            placeholder="e.g., No sugar, Extra hot, Less ice..."
+            maxlength="150"
+          ></textarea>
+          <div class="char-count"><span id="charCount">0</span>/150</div>
+        </div>
+
+        <button class="btn-primary" onclick="addToCartFromModal()">
+          <i class="fas fa-shopping-bag"></i>
+          <span>Add to Cart</span>
+        </button>
+      </div>
     </div>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal hidden">
-        <div class="modal-content login-modal">
-            <button class="close-btn" onclick="closeLoginModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="login-header">
-                <img src="CafeCoffeeto_Logo.jpg" alt="Logo" class="login-logo">
-                <h2>Staff Login</h2>
-            </div>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="loginUsername">Username</label>
-                    <input type="text" id="loginUsername" placeholder="Enter username" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" placeholder="Enter password" required>
-                </div>
-                <div class="login-error hidden" id="loginError">
-                    Invalid credentials. Please try again.
-                </div>
-                <button type="submit" class="btn-primary">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login
-                </button>
-            </form>
+      <div class="modal-content login-modal">
+        <button class="close-btn" onclick="closeLoginModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="login-header">
+          <img src="CafeCoffeeto_Logo.jpg" alt="Logo" class="login-logo" />
+          <h2>Staff Login</h2>
         </div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="loginUsername">Username</label>
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Enter username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Enter password"
+              required
+            />
+          </div>
+          <div class="login-error hidden" id="loginError">
+            Invalid credentials. Please try again.
+          </div>
+          <button type="submit" class="btn-primary">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+          </button>
+        </form>
+      </div>
     </div>
 
     <!-- Confirmation Modal -->
     <div id="confirmationModal" class="modal hidden">
-        <div class="modal-content confirmation-modal">
-            <div class="confirmation-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h2>Order Placed!</h2>
-            <p class="order-number-display">Your order number is</p>
-            <div class="order-number-big">#<span id="orderNumber"></span></div>
-            <p class="pay-at-counter">Please pay at the counter</p>
-            <p class="redirect-text">Redirecting to order tracking in <span id="redirectCountdown">5</span> seconds...</p>
-            <div class="confirmation-actions">
-                <button class="btn-secondary" onclick="showReviewModal()">
-                    <i class="fas fa-star"></i> Leave a Review
-                </button>
-                <button class="btn-primary" onclick="closeConfirmationAndTrack()">
-                    <i class="fas fa-clipboard-check"></i> Track Order
-                </button>
-            </div>
+      <div class="modal-content confirmation-modal">
+        <div class="confirmation-icon">
+          <i class="fas fa-check-circle"></i>
         </div>
+        <h2>Order Placed!</h2>
+        <p class="order-number-display">Your order number is</p>
+        <div class="order-number-big">#<span id="orderNumber"></span></div>
+        <p class="pay-at-counter">Please pay at the counter</p>
+        <p class="redirect-text">
+          Redirecting to order tracking in
+          <span id="redirectCountdown">5</span> seconds...
+        </p>
+        <div class="confirmation-actions">
+          <button class="btn-secondary" onclick="showReviewModal()">
+            <i class="fas fa-star"></i> Leave a Review
+          </button>
+          <button class="btn-primary" onclick="closeConfirmationAndTrack()">
+            <i class="fas fa-clipboard-check"></i> Track Order
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Review Modal -->
     <div id="reviewModal" class="modal hidden">
-        <div class="modal-content review-modal">
-            <button class="close-btn" onclick="closeReviewModal()">
-                <i class="fas fa-times"></i>
+      <div class="modal-content review-modal">
+        <button class="close-btn" onclick="closeReviewModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <h2>How was your experience?</h2>
+        <form id="reviewForm" onsubmit="submitReview(event)">
+          <div class="form-group">
+            <label for="reviewName">Your Name</label>
+            <input
+              type="text"
+              id="reviewName"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Rating</label>
+            <div class="star-rating" id="starRating">
+              <i class="far fa-star" onclick="setRating(1)"></i>
+              <i class="far fa-star" onclick="setRating(2)"></i>
+              <i class="far fa-star" onclick="setRating(3)"></i>
+              <i class="far fa-star" onclick="setRating(4)"></i>
+              <i class="far fa-star" onclick="setRating(5)"></i>
+            </div>
+            <input type="hidden" id="reviewRating" value="0" />
+          </div>
+          <div class="form-group">
+            <label for="reviewComment">Your Review</label>
+            <textarea
+              id="reviewComment"
+              rows="3"
+              placeholder="Tell us about your experience..."
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="reviewInstagram">Instagram Handle (Optional)</label>
+            <div class="instagram-input">
+              <span>@</span>
+              <input
+                type="text"
+                id="reviewInstagram"
+                placeholder="yourhandle"
+              />
+            </div>
+          </div>
+          <div class="review-actions">
+            <button type="button" class="btn-secondary" onclick="skipReview()">
+              Skip
             </button>
-            <h2>How was your experience?</h2>
-            <form id="reviewForm" onsubmit="submitReview(event)">
-                <div class="form-group">
-                    <label for="reviewName">Your Name</label>
-                    <input type="text" id="reviewName" placeholder="Enter your name" required>
-                </div>
-                <div class="form-group">
-                    <label>Rating</label>
-                    <div class="star-rating" id="starRating">
-                        <i class="far fa-star" onclick="setRating(1)"></i>
-                        <i class="far fa-star" onclick="setRating(2)"></i>
-                        <i class="far fa-star" onclick="setRating(3)"></i>
-                        <i class="far fa-star" onclick="setRating(4)"></i>
-                        <i class="far fa-star" onclick="setRating(5)"></i>
-                    </div>
-                    <input type="hidden" id="reviewRating" value="0">
-                </div>
-                <div class="form-group">
-                    <label for="reviewComment">Your Review</label>
-                    <textarea id="reviewComment" rows="3" placeholder="Tell us about your experience..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="reviewInstagram">Instagram Handle (Optional)</label>
-                    <div class="instagram-input">
-                        <span>@</span>
-                        <input type="text" id="reviewInstagram" placeholder="yourhandle">
-                    </div>
-                </div>
-                <div class="review-actions">
-                    <button type="button" class="btn-secondary" onclick="skipReview()">Skip</button>
-                    <button type="submit" class="btn-primary">Submit Review</button>
-                </div>
-            </form>
-        </div>
+            <button type="submit" class="btn-primary">Submit Review</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav" id="bottomNav">
-        <button class="nav-item" onclick="showLanding()">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </button>
-        <button class="nav-item" onclick="showMenu()">
-            <i class="fas fa-utensils"></i>
-            <span>Menu</span>
-        </button>
-        <button class="nav-item" onclick="showCart()">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Cart</span>
-            <span class="nav-badge" id="navCartBadge">0</span>
-        </button>
-        <button class="nav-item" onclick="showOrderTracking()">
-            <i class="fas fa-clipboard-list"></i>
-            <span>Orders</span>
-        </button>
+      <button class="nav-item" onclick="showLanding()">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" onclick="showMenu()">
+        <i class="fas fa-utensils"></i>
+        <span>Menu</span>
+      </button>
+      <button class="nav-item" onclick="showCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span class="nav-badge" id="navCartBadge">0</span>
+      </button>
+      <button class="nav-item" onclick="showOrderTracking()">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Orders</span>
+      </button>
     </nav>
 
     <!-- Scripts - Modular Architecture -->
@@ -952,5 +1572,5 @@
     <script src="js/ui-admin.js"></script>
     <script src="js/ui-kitchen.js"></script>
     <script src="js/main.js"></script>
-</body>
+  </body>
 </html>
