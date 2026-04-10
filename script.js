@@ -3,12 +3,12 @@ let isLoggedIn = false;
 let currentUser = null;
 let isAuthenticating = false;
 
-// Demo users (for authentication)
-const demoUsers = [
-  { email: "admin@cafeeto.com", password: "admin123" },
-  { email: "user@cafeeto.com", password: "user123" },
-  { email: "test@test.com", password: "test123" },
-];
+// Single demo user - ONLY valid credential
+const DEMO_USER = {
+  email: "demo@cafeeto.com",
+  password: "demo123",
+  name: "Demo User",
+};
 
 // Initialize auth on page load
 document.addEventListener("DOMContentLoaded", () => {
@@ -116,8 +116,8 @@ function handleLogin(event) {
     return;
   }
 
-  if (password.length < 3) {
-    showLoginError("Password must be at least 3 characters");
+  if (password.length === 0) {
+    showLoginError("Password is required");
     return;
   }
 
@@ -126,16 +126,17 @@ function handleLogin(event) {
   loginBtn.disabled = true;
   loginBtn.classList.add("loading");
 
-  // Simulate authentication delay
+  // Authenticate against DEMO user
   setTimeout(() => {
-    // Check against demo users (or accept any valid email/password in demo mode)
-    const isValid = email && password.length >= 3;
+    // Strict validation: Must match EXACTLY
+    const isValid =
+      email === DEMO_USER.email && password === DEMO_USER.password;
 
     if (isValid) {
       // Authentication successful
       currentUser = {
-        email: email,
-        name: email.split("@")[0],
+        email: DEMO_USER.email,
+        name: DEMO_USER.name,
         loginTime: new Date().toISOString(),
       };
 
@@ -147,6 +148,7 @@ function handleLogin(event) {
       // Redirect after showing success message
       setTimeout(() => {
         isAuthenticating = false;
+        isLoggedIn = true;
         loginBtn.disabled = false;
         loginBtn.classList.remove("loading");
         setAuthenticatedState();
@@ -183,29 +185,6 @@ function showLoginSuccess(message) {
   const successDiv = document.getElementById("loginSuccess");
   successDiv.textContent = message;
   successDiv.classList.add("show");
-}
-
-function toggleGuestMode() {
-  const loginBtn = document.getElementById("loginBtn");
-  loginBtn.disabled = true;
-  loginBtn.classList.add("loading");
-
-  setTimeout(() => {
-    isLoggedIn = true;
-    currentUser = {
-      email: "guest@cafeeto.com",
-      name: "Guest User",
-      isGuest: true,
-      loginTime: new Date().toISOString(),
-    };
-
-    localStorage.setItem("cafeUser", JSON.stringify(currentUser));
-    setAuthenticatedState();
-    showMenu();
-
-    loginBtn.disabled = false;
-    loginBtn.classList.remove("loading");
-  }, 800);
 }
 
 function logout() {
