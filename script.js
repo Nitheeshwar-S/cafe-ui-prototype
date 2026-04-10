@@ -143,23 +143,35 @@ function handleLogin(event) {
       // Save to localStorage
       localStorage.setItem("cafeUser", JSON.stringify(currentUser));
 
-      showLoginSuccess("✓ Login successful! Redirecting...");
+      // Show success message on login page (keep login page visible)
+      showLoginSuccess("✓ Login successful! Redirecting to dashboard...");
 
-      // Redirect after showing success message
+      // Disable form during transition
+      document.getElementById("email").disabled = true;
+      document.getElementById("password").disabled = true;
+      loginBtn.disabled = true;
+
+      // Wait 2.5 seconds to let user see success message, then transition
       setTimeout(() => {
         isAuthenticating = false;
         isLoggedIn = true;
-        loginBtn.disabled = false;
-        loginBtn.classList.remove("loading");
-        setAuthenticatedState();
 
         // Clear form
         document.getElementById("email").value = "";
         document.getElementById("password").value = "";
+        document.getElementById("email").disabled = false;
+        document.getElementById("password").disabled = false;
+        loginBtn.disabled = false;
+        loginBtn.classList.remove("loading");
 
-        // Show menu
+        // Clear messages
+        document.getElementById("loginError").classList.remove("show");
+        document.getElementById("loginSuccess").classList.remove("show");
+
+        // NOW hide login page and show menu
+        setAuthenticatedState();
         showMenu();
-      }, 1500);
+      }, 2500);
     } else {
       // Authentication failed
       isAuthenticating = false;
