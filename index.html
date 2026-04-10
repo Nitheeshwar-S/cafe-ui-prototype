@@ -2037,8 +2037,279 @@
       </button>
     </nav>
 
-    <!-- Scripts - Modular Architecture -->
-    <script src="js/config.js"></script>
+    <!-- Inline Authentication Script (Must be before other scripts) -->
+    <script>
+      // ===== AUTHENTICATION SYSTEM =====
+      let isLoggedIn = false;
+      let currentUser = null;
+      let isAuthenticating = false;
+
+      // Single demo user - ONLY valid credential
+      const DEMO_USER = {
+        email: "demo@cafeeto.com",
+        password: "demo123",
+        name: "Demo User",
+      };
+
+      // Initialize auth on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeAuth();
+        setupUserProfileMenu();
+      });
+
+      function initializeAuth() {
+        // Check if user is already logged in
+        const savedUser = localStorage.getItem("cafeUser");
+
+        if (savedUser) {
+          try {
+            currentUser = JSON.parse(savedUser);
+            isLoggedIn = true;
+            setAuthenticatedState();
+          } catch (e) {
+            resetAuthState();
+          }
+        } else {
+          resetAuthState();
+        }
+      }
+
+      function setAuthenticatedState() {
+        isLoggedIn = true;
+        document.body.classList.remove("login-active");
+        document.getElementById("loginPage").classList.add("hidden");
+        updateUserDisplay();
+      }
+
+      function setupUserProfileMenu() {
+        const userProfileBtn = document.getElementById("userProfileBtn");
+        const userDropdown = document.getElementById("userDropdown");
+
+        if (userProfileBtn) {
+          userProfileBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle("show");
+          });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+          if (userDropdown && !e.target.closest(".header-user-menu")) {
+            userDropdown.classList.remove("show");
+          }
+        });
+      }
+
+      function updateUserDisplay() {
+        if (!currentUser) return;
+
+        const userNameDisplay = document.getElementById("userNameDisplay");
+        const userEmailDisplay = document.getElementById("userEmailDisplay");
+
+        if (userNameDisplay) {
+          userNameDisplay.textContent =
+            currentUser.name || currentUser.email.split("@")[0];
+        }
+
+        if (userEmailDisplay) {
+          userEmailDisplay.textContent = currentUser.email;
+        }
+      }
+
+      function resetAuthState() {
+        isLoggedIn = false;
+        currentUser = null;
+        document.body.classList.add("login-active");
+        document.getElementById("loginPage").classList.remove("hidden");
+
+        // Hide all other pages
+        document.getElementById("landingPage")?.classList.add("hidden");
+        document.getElementById("menuPage")?.classList.add("hidden");
+        document.getElementById("cartPage")?.classList.add("hidden");
+        document.getElementById("adminPanel")?.classList.add("hidden");
+        document.getElementById("kitchenPanel")?.classList.add("hidden");
+        document.querySelector("header")?.classList.add("hidden");
+      }
+
+      function handleLogin(event) {
+        event.preventDefault();
+
+        if (isAuthenticating) return;
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const errorDiv = document.getElementById("loginError");
+        const successDiv = document.getElementById("loginSuccess");
+        const loginBtn = document.getElementById("loginBtn");
+
+        // Clear previous messages
+        errorDiv.classList.remove("show");
+        successDiv.classList.remove("show");
+
+        // Validation
+        if (!email || !password) {
+          showLoginError("Please fill in all fields");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showLoginError("Please enter a valid email address");
+          return;
+        }
+
+        if (password.length === 0) {
+          showLoginError("Password is required");
+          return;
+        }
+
+        // Start authentication
+        isAuthenticating = true;
+        loginBtn.disabled = true;
+        loginBtn.classList.add("loading");
+
+        // Authenticate against DEMO user
+        setTimeout(() => {
+          // Strict validation: Must match EXACTLY
+          const isValid =
+            email === DEMO_USER.email && password === DEMO_USER.password;
+
+          if (isValid) {
+            // Authentication successful
+            currentUser = {
+              email: DEMO_USER.email,
+              name: DEMO_USER.name,
+              loginTime: new Date().toISOString(),
+            };
+
+            // Save to localStorage
+            localStorage.setItem("cafeUser", JSON.stringify(currentUser));
+
+            // Show success message on login page (keep login page visible)
+            showLoginSuccess("✓ Login successful! Redirecting to dashboard...");
+
+            // Disable form during transition
+            document.getElementById("email").disabled = true;
+            document.getElementById("password").disabled = true;
+            loginBtn.disabled = true;
+
+            // Wait 2.5 seconds to let user see success message, then transition
+            setTimeout(() => {
+              isAuthenticating = false;
+              isLoggedIn = true;
+
+              // Clear form
+              document.getElementById("email").value = "";
+              document.getElementById("password").value = "";
+              document.getElementById("email").disabled = false;
+              document.getElementById("password").disabled = false;
+              loginBtn.disabled = false;
+              loginBtn.classList.remove("loading");
+
+              // Clear messages
+              document.getElementById("loginError").classList.remove("show");
+              document.getElementById("loginSuccess").classList.remove("show");
+
+              // NOW hide login page and show menu
+              setAuthenticatedState();
+              showMenu();
+            }, 2500);
+          } else {
+            // Authentication failed
+            isAuthenticating = false;
+            loginBtn.disabled = false;
+            loginBtn.classList.remove("loading");
+            showLoginError("Invalid email or password");
+          }
+        }, 1200);
+      }
+
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function showLoginError(message) {
+        const errorDiv = document.getElementById("loginError");
+        errorDiv.textContent = "⚠ " + message;
+        errorDiv.classList.add("show");
+      }
+
+      function showLoginSuccess(message) {
+        const successDiv = document.getElementById("loginSuccess");
+        successDiv.textContent = message;
+        successDiv.classList.add("show");
+      }
+
+      function logout() {
+        // Close dropdown first
+        const userDropdown = document.getElementById("userDropdown");
+        if (userDropdown) {
+          userDropdown.classList.remove("show");
+        }
+
+        // Clear auth data
+        isLoggedIn = false;
+        currentUser = null;
+        localStorage.removeItem("cafeUser");
+
+        // Reset auth UI
+        resetAuthState();
+
+        // Clear login form
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("loginError").classList.remove("show");
+        document.getElementById("loginSuccess").classList.remove("show");
+
+        // Hide all pages and show login
+        document.getElementById("landingPage")?.classList.add("hidden");
+        document.getElementById("menuPage")?.classList.add("hidden");
+        document.getElementById("cartPage")?.classList.add("hidden");
+        document.getElementById("adminPanel")?.classList.add("hidden");
+        document.getElementById("kitchenPanel")?.classList.add("hidden");
+        document.querySelector("header")?.classList.add("hidden");
+      }
+
+      function getCurrentUser() {
+        return currentUser;
+      }
+
+      function isUserLoggedIn() {
+        return isLoggedIn && currentUser !== null;
+      }
+
+      function showMenu() {
+        // Check if user is authenticated
+        if (!isUserLoggedIn()) {
+          resetAuthState();
+          return;
+        }
+
+        // Hide login and other pages
+        document.getElementById("loginPage")?.classList.add("hidden");
+        document.getElementById("landingPage")?.classList.add("hidden");
+        document.getElementById("cartPage")?.classList.add("hidden");
+        document.getElementById("adminPanel")?.classList.add("hidden");
+        document.getElementById("kitchenPanel")?.classList.add("hidden");
+
+        // Show menu and header
+        const menuPage = document.getElementById("menuPage");
+        const header = document.querySelector("header");
+
+        if (menuPage) {
+          menuPage.classList.remove("hidden");
+        }
+
+        if (header) {
+          header.classList.remove("hidden");
+        }
+
+        // Remove body login class
+        document.body.classList.remove("login-active");
+      }
+
+      // ===== END AUTHENTICATION SYSTEM =====
+    </script>
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui-customer.js"></script>
